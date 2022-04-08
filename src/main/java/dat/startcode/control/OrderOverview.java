@@ -69,7 +69,7 @@ public class OrderOverview extends HttpServlet {
         catch (DatabaseException e)
         {
             Logger.getLogger("web").log(Level.SEVERE, e.getMessage());
-            request.setAttribute("fejlbesked", e.getMessage());
+            request.setAttribute("errormessage", e.getMessage());
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
         doGet(request, response);
