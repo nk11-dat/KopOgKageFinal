@@ -38,7 +38,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <c:if test="${sessionScope.user == null }">
-                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/login.jsp">Login</a>
+                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/index.jsp">Login</a>
                     </c:if>
                     <c:if test="${sessionScope.user != null }">
                         <a class="nav-item nav-link" href="${pageContext.request.contextPath}/logout">Log out</a>
@@ -46,7 +46,7 @@
                     </c:if>
                     <c:if test="${sessionScope.user.roleId == 2}">
                         <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverview">Odere</a>
-                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverview">Kundeliste</a>
+                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/GetUsers">Kundeliste</a>
                     </c:if>
 
                 </div>

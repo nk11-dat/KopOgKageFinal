@@ -37,7 +37,7 @@
         </c:if>
 
         <p>Jump back to the <a href="index.jsp">Frontpage</a>,
-            or try <a href="login.jsp">logging</a> in again.</p>
+            or try <a href="index.jsp">logging</a> in again.</p>
 
     </jsp:body>
 </t:pagetemplate>

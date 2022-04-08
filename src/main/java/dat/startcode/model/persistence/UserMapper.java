@@ -97,10 +97,9 @@ public class UserMapper implements IUserMapper
     public List<User> showAllUsers() throws DatabaseException, SQLException
     {
         Logger.getLogger("web").log(Level.INFO, "");
-        User user = null;
         List<User> userList = new ArrayList<>();
-        String sql = "SELECT * FROM USERS " +
-                "WHERE role_id IS 1";
+        String sql = "SELECT * FROM user " +
+                "WHERE role_id = 1";
 
         try (Connection connection = connectionPool.getConnection())
         {
@@ -116,7 +115,7 @@ public class UserMapper implements IUserMapper
                     String email = rs.getString("email");
                     int balance = rs.getInt("balance");
 
-                    user = new User(userId, roleId, username, password, email, balance);
+                    User user = new User(userId, roleId, username, password, email, balance);
                     userList.add(user);
                 }
             } catch (SQLException ex)
