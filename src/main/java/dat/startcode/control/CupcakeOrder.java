@@ -55,7 +55,7 @@ public class CupcakeOrder extends HttpServlet {
       //  request.setAttribute("cupcakeToppingList", cupcakeToppingList);
       // request.setAttribute("cupcakeBottomList", cupcakeBottomList);
 
-        request.getRequestDispatcher("order.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/order.jsp").forward(request, response);
 
 
     }

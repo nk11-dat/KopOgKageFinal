@@ -15,16 +15,15 @@ th, td {
     width: 50%;
 }
 
-.center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-}
 
 .table-danger{
     --bs-table-bg: lightpink!important;
 }
+
+
+
+
+
 
 /*.badge {*/
 /*    padding-left: 5px;*/
