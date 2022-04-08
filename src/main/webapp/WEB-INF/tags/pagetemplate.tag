@@ -40,26 +40,26 @@
                     <c:if test="${sessionScope.user == null }">
                         <a class="nav-item nav-link" href="${pageContext.request.contextPath}/login.jsp">Login</a>
                     </c:if>
-                    <c:if test="${sessionScope.user != null }">
-                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/logout">Log out</a>
-                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/">${sessionScope.user.email}</a>
-                    </c:if>
                     <c:if test="${sessionScope.user.roleId == 2}">
-                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverview">Admin manden</a>
+                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverview">Ordre</a>
                     </c:if>
                     <c:if test="${sessionScope.user.roleId == 1}">
                         <a class="nav-item nav-link" href="${pageContext.request.contextPath}/CupcakeOrder">Bestilling</a>
                         <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverviewUser">Kunde konen</a>
+                        <a class="nav-item nav-link" >Saldo: ${sessionScope.user.balance} </a>
+                        <a class="nav-item nav-link"> </a>
                         <a class="navbar-brand" href="${pageContext.request.contextPath}/index.jsp">
                             <i class="fa" >
-                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                                 <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5
-                                .5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                            </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-basket" viewBox="0 0 16 16">
+                                    <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"/>
+                                </svg>
                              </i>
                         </a>
-                        <span  style="color: darkblue">
-                         ${sessionScope.user.balance} </span>
+
+                    </c:if>
+                    <c:if test="${sessionScope.user != null }">
+                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/logout">Log out</a>
+                        <a class="nav-item nav-link">${sessionScope.user.email}</a>
                     </c:if>
 
 
