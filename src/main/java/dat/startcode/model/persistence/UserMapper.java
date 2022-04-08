@@ -4,6 +4,8 @@ import dat.startcode.model.entities.User;
 import dat.startcode.model.exceptions.DatabaseException;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,17 +35,20 @@ public class UserMapper implements IUserMapper
                 ps.setString(1, email);
                 ps.setString(2, password);
                 ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
+                if (rs.next())
+                {
                     int userId = rs.getInt("user_id");
                     int roleId = rs.getInt("role_id");
                     String username = rs.getString("username");
                     int balance = rs.getInt("balance");
                     user = new User(userId, roleId, username, password, email, balance);
-                } else {
+                } else
+                {
                     throw new DatabaseException("Wrong username or password");
                 }
             }
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new DatabaseException(ex, "Error logging in. Something went wrong with the database");
         }
         return user;
@@ -67,13 +72,15 @@ public class UserMapper implements IUserMapper
                 ps.setString(3, email);
                 ps.setInt(4, balance);
                 int rowsAffected = ps.executeUpdate();
-                if (rowsAffected == 1) {
+                if (rowsAffected == 1)
+                {
 
                 }
                 ResultSet idResultset = ps.getGeneratedKeys();
-                if (idResultset.next()) {
+                if (idResultset.next())
+                {
                     newId = idResultset.getInt(1);
-                    user = new User(newId,1, username, password, email, balance);
+                    user = new User(newId, 1, username, password, email, balance);
                 } else
                 {
                     throw new DatabaseException("The user with username = " + username + " could not be inserted into the database");
@@ -85,6 +92,39 @@ public class UserMapper implements IUserMapper
         }
         return user;
 
+    }
+
+    public List<User> showAllUsers() throws DatabaseException, SQLException
+    {
+        Logger.getLogger("web").log(Level.INFO, "");
+        User user = null;
+        List<User> userList = new ArrayList<>();
+        String sql = "SELECT * FROM USERS " +
+                "WHERE role_id IS 1";
+
+        try (Connection connection = connectionPool.getConnection())
+        {
+            try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
+            {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next())
+                {
+                    int userId = rs.getInt("user_id");
+                    int roleId = rs.getInt("role_id");
+                    String username = rs.getString("username");
+                    String password = rs.getString("password");
+                    String email = rs.getString("email");
+                    int balance = rs.getInt("balance");
+
+                    user = new User(userId, roleId, username, password, email, balance);
+                    userList.add(user);
+                }
+            } catch (SQLException ex)
+            {
+                throw new DatabaseException(ex, "Ubsi Dubsi, ingen bruger ??? ");
+            }
+        }
+        return userList;
     }
 }
 
