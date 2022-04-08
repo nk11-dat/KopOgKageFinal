@@ -1,19 +1,16 @@
 # default-web-applikation
 
 ## TODO List:
-1. Ret UserMapper & User således at Login & Create fungere efter hensigten med Email, Role (lav DTO med join)...
-2. Lav DTOs
-   1. TotalSumDTO (på toppingPris + bottomPris * antal)
-   2. OrderOversigtDTO (KundeNavn, TotalSum)
-
-3. Bo Bobsen [Bestillings Tidspunkt] [STATUS]
-   1. VaninljeOste Muffin 12stk 120kr 
-   2. ChocoladeOrange Muffin 2st 14kr 
-4. Bo Bobsen [Bestillings Tidspunkt] [STATUS]
-   3. VaninljeOste Muffin 12stk 120kr
-   4. ChocoladeOrange Muffin 2st 14kr
-5. Ib Ibsen
-   1. .......
+1. ~~Ret UserMapper & User således at Login & Create fungere efter hensigten med Email, Role (lav DTO med join)...~~
+2. ~~Lav DTOs~~
+   1. ~~TotalSumDTO (på toppingPris + bottomPris * antal)~~
+   2. ~~OrderOversigtDTO (KundeNavn, TotalSum)~~
+3. Timi's side, Order overviewer user
+4. Tilføj til kurv side
+5. tak side :) --> skal indeholde: order_id, 
+6. farve n' stripper ;)
+7. use-case 6 og 7 til Jon.
+   
 
 Frugtkage...
 
