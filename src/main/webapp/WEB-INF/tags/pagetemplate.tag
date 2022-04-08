@@ -45,7 +45,8 @@
                         <a class="nav-item nav-link" href="${pageContext.request.contextPath}/">${sessionScope.user.email}</a>
                     </c:if>
                     <c:if test="${sessionScope.user.roleId == 2}">
-                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverview">Admin manden</a>
+                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverview">Odere</a>
+                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverview">Kundeliste</a>
                     </c:if>
 
                 </div>

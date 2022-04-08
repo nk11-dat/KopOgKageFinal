@@ -2,6 +2,7 @@ package dat.startcode.control;
 
 import dat.startcode.model.DTO.OrderOverviewHeaderAdminDTO;
 import dat.startcode.model.config.ApplicationStart;
+import dat.startcode.model.entities.User;
 import dat.startcode.model.exceptions.DatabaseException;
 import dat.startcode.model.persistence.OrderMapper;
 import dat.startcode.model.persistence.ConnectionPool;
@@ -11,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,12 +31,17 @@ public class OrderOverview extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
         response.setContentType("text/html");
         List<OrderOverviewHeaderAdminDTO> orderDTOList = null;
 
         try
         {
-            orderDTOList = orderMapper.getAllOrders();
+            User user = (User) session.getAttribute("user");
+            if (user != null && user.getRoleId() == 2)
+                orderDTOList = orderMapper.getAllOrders();
+            else
+                throw new DatabaseException("Du skal være logget ind som admin for at tilgå denne side!");
         }
         catch (DatabaseException e)
         {
@@ -43,7 +50,6 @@ public class OrderOverview extends HttpServlet {
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
         request.setAttribute("orderDTOList", orderDTOList);
-//        request.setAttribute("orderItemDTOList",);
         request.getRequestDispatcher("WEB-INF/adminIndex.jsp").forward(request, response);
     }
 
