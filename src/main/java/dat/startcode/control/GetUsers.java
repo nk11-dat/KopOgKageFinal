@@ -30,6 +30,7 @@ public class GetUsers extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         response.setContentType("text/html");
+
         List<User> userList = null;
         try
         {
@@ -43,7 +44,7 @@ public class GetUsers extends HttpServlet
             e.printStackTrace();
         }
         request.setAttribute("userList",userList);
-        request.getRequestDispatcher("WEB_INF/userList.jsp").forward(request,response);
+        request.getRequestDispatcher("WEB-INF/userList.jsp").forward(request,response);
 
     }
 

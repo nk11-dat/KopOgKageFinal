@@ -18,17 +18,33 @@
 
         <form method="get">
             <table class="table">
-                <c:forEach var="user" items="${requestScope.userList}">
                     <thead class="table-danger">
                     <tr>
-                        <th scope="col">${user.userId}</th>
-                        <th scope="col">${user.roleId}</th>
-                        <th scope="col">${user.username}</th>
-                        <th scope="col">${user.password}</th>
-                        <th scope="col">${user.email}</th>
-                        <th scope="col">${user.balance}</th>
+                        <th scope="col">Bruger ID</th>
+                        <!--   <th scope="col">Role</th>-->
+                        <th scope="col">Navn</th>
+                        <th scope="col">Kodeord</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Saldo</th>
                         <th scope="col">
-                </c:forEach>
+                        </th>
+                    </tr>
+                    </thead>
+                <tbody>
+                    <c:forEach var="user" items="${requestScope.userList}">
+                    <tr>
+                        <td scope="col">${user.userId}</td>
+                        <!--    <c:if test="${user.roleId == 1}">
+                        <td> Bruger </td>
+                        </c:if> -->
+                        <td scope="col">${user.username}</td>
+                        <td scope="col">${user.password}</td>
+                        <td scope="col">${user.email}</td>
+                        <td scope="col">${user.balance}</td>
+                        <td scope="col">
+                    </tr>
+                    </c:forEach>
+                </tbody>
             </table>
         </form>
 

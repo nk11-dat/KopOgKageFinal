@@ -40,8 +40,8 @@
             </div>
         </form>
 
-            <p>Du er endnu ikke logget ind, gør det her: <a
-                    href="login.jsp">login</a></p>
+            <!--  <p>Du er endnu ikke logget ind, gør det her: <a
+                    href="login.jsp">login</a></p>-->
         </c:if>
 
         <c:if test="${sessionScope.user != null}">
