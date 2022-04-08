@@ -45,9 +45,9 @@
             </c:forEach>
             </tr>
 
-           <h2>Total sum: </h2>
             </tbody>
         </table>
+            <h4>Total pris: ${requestScope.totalPrice}</h4>
 
         <button type="button" class="btn btn-primary" confirm="Are your sure?">Bekræft</button>
 

@@ -34,10 +34,12 @@ public class OrderOverviewUser extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         List<OrderItemDTOT> orderItemDTOList = null;
+        int totalPrice = 0;
 
         try
         {
             orderItemDTOList = orderMapperT.getOrderItemByOrderId(1);
+            totalPrice = orderMapperT.getTotalSumByOrderId(1);
         }
         catch (DatabaseException e)
         {
@@ -46,6 +48,7 @@ public class OrderOverviewUser extends HttpServlet {
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
         request.setAttribute("orderItemDTOList", orderItemDTOList);
+        request.setAttribute("totalPrice", totalPrice);
         request.getRequestDispatcher("WEB-INF/orderOverviewT.jsp").forward(request, response);
     }
 

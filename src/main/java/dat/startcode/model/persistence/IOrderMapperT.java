@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface IOrderMapperT
 {
-    public List<OrderItemDTOT> getOrderItemByOrderId(int orderitemId) throws DatabaseException;
-    public int getTotalSumByOrederId() throws DatabaseException;
+    public List<OrderItemDTOT> getOrderItemByOrderId(int orderId) throws DatabaseException;
+    public int getTotalSumByOrderId(int orderId) throws DatabaseException;
 }
