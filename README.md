@@ -7,7 +7,7 @@
    2. ~~OrderOversigtDTO (KundeNavn, TotalSum)~~
 3. Timi's side, Order overviewer user
 4. Tilføj til kurv side
-5. tak side :) --> skal indeholde: order_id, 
+5. tak side :) --> skal indeholde: på order Id --> 
 6. farve n' stripper ;)
 7. use-case 6 og 7 til Jon.
    
