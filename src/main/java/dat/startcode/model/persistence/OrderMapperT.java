@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class OrderMapperT implements IOrderMapperT
 {
@@ -22,6 +24,8 @@ public class OrderMapperT implements IOrderMapperT
     @Override
     public List<OrderItemDTOT> getOrderItemByOrderId(int orderId) throws DatabaseException
     {
+        Logger.getLogger("web").log(Level.INFO, "");
+
         List<OrderItemDTOT> orderItemDTOList = new ArrayList<>();
 
         String sql = "SELECT cupcake.orderitem.order_id, bottom.flavor as bottom, topping.flavor as topping, quantity, SUM(quantity*(topping.price + bottom.price)) as price " +
@@ -39,21 +43,18 @@ public class OrderMapperT implements IOrderMapperT
             {
                 ps.setInt(1, orderId);
                 ResultSet rs = ps.executeQuery();
-                if (rs.next())
+                while (rs.next())
                 {
                     String bottom = rs.getString("bottom");
                     String topping = rs.getString("topping");
                     int quantity = rs.getInt("quantity");
                     int price = rs.getInt("price");
                     orderItemDTOList.add(new OrderItemDTOT(bottom, topping, quantity, price));
-                } else
-                {
-                    throw new DatabaseException("Error. Kan ikke finde order.");
                 }
             }
-        } catch (SQLException | DatabaseException ex)
+        } catch (SQLException ex)
         {
-            throw new DatabaseException(ex, "Fejl i databasen.");
+            throw new DatabaseException(ex, "Fejl under indlæsning af 'orderItems' fra databasen");
         }
         return orderItemDTOList;
     }
