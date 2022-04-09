@@ -12,4 +12,5 @@ public interface IOrderMapper {
     public List<OrderItemOverviewAdminDTO> getOrdersItems(int orderId) throws DatabaseException;
     public Order getOrderById(int orderId) throws DatabaseException;
     public boolean setOrderStatusById(int orderId) throws DatabaseException;
+    public boolean deleteOrderByOrderId(int orderId) throws DatabaseException;
 }

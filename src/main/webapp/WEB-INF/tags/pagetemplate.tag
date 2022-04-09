@@ -43,11 +43,10 @@
                     <c:if test="${sessionScope.user != null }">
                         <a class="nav-item nav-link" href="${pageContext.request.contextPath}/logout">Log out</a>
                         <a class="nav-item nav-link" href="${pageContext.request.contextPath}/CupcakeOrder">Bestilling</a>
-
                         <a class="nav-item nav-link" href="${pageContext.request.contextPath}/">${sessionScope.user.email}</a>
                     </c:if>
                     <c:if test="${sessionScope.user.roleId == 2}">
-                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverview">Admin manden</a>
+                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverviewAdmin">Order oversigt</a>
                     </c:if>
                     <c:if test="${sessionScope.user.roleId == 1}">
                         <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverviewUser">Kunde konen</a>

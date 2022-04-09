@@ -119,6 +119,45 @@ public class OrderMapper implements IOrderMapper{
     }
 
     @Override
+    public boolean deleteOrderByOrderId(int orderid) throws DatabaseException {
+        Logger.getLogger("web").log(Level.INFO, "");
+        boolean result = false;
+
+        try (Connection connection = connectionPool.getConnection()) {
+
+            //Først slettes de orderitems som er ophængt på orderen
+            String sql = "DELETE FROM orderitem " +
+                    "WHERE order_id = ?;";
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setInt(1, orderid);
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected >= 1){
+                    result = true;
+                } else {
+                    throw new DatabaseException("Underligt mindre end 1 row affected med order med id = " + orderid + " blev slettet fra orderitem tabellen. (check evt. databasen for fejl)");
+                }
+            }
+
+            //Derefter slettes orderen
+            sql = "DELETE FROM cupcake.order " +
+                    "WHERE order_id = ?;";
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setInt(1, orderid);
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected == 1){
+                    result = true;
+                } else {
+                    throw new DatabaseException("Underligt flere/mindre end 1 row affected med order med id = " + orderid + " blev slettet fra order tabellen (check evt. databasen for fejl)");
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DatabaseException("Kunne ikke slette order og orderitem for order med id = " + orderid);
+        }
+
+        return result;
+    }
+
+    @Override
     public Order getOrderById(int orderId) throws DatabaseException {
         Logger.getLogger("web").log(Level.INFO, "orderId=" + orderId);
         return null;
