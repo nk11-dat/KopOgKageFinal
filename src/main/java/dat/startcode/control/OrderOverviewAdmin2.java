@@ -33,8 +33,7 @@ public class OrderOverviewAdmin2 extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        //TODO: Brug en Orde- entity istedet for bare at benytte orderId?
-        //TODO: Hvad mener jon/nikolaj om det?
+        //TODO: Ellers skal du hive koden ud i en selvstændig klasse i service pakken og så sende request og response derned
         int orderId = Integer.parseInt(request.getParameter("orderid"));  //Hent orderId ud button press
         boolean success = false;
         try

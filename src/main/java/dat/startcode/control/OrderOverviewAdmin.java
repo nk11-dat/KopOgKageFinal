@@ -64,7 +64,9 @@ public class OrderOverviewAdmin extends HttpServlet {
 
         try
         {
-            orderMapper.setOrderStatusById(orderId);
+            boolean result = orderMapper.setOrderStatusById(orderId);
+            if (!result)
+                request.setAttribute("insufficient_funds", "Kunden har ikke nok penge til at kunne betale!");
         }
         catch (DatabaseException e)
         {

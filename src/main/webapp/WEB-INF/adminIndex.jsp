@@ -14,6 +14,8 @@
 
     <jsp:body>
 
+        <h1 class="center">${requestScope.insufficient_funds}</h1>
+
         <h3>Her kan du se alle ordere: </h3>
 
         <div style="padding:0px 0px 5px 5px">
@@ -29,7 +31,10 @@
                         <th scope="col" class="customerName">${orderDTO.costumerUsername}</th>
                         <th scope="col">${orderDTO.totalsum} kr</th>
                         <th scope="col">${orderDTO.date}</th>
-                        <th scope="col">${orderDTO.status}</th>
+                        <th scope="col">
+                            <c:if test="${orderDTO.status == true}">Betalt</c:if>
+                            <c:if test="${orderDTO.status == false}">Afventer betaling</c:if>
+                        </th>
                         <th scope="col">
                             <button
                                     <c:if test="${orderDTO.status == true}">disabled</c:if>
