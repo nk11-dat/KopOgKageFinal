@@ -38,6 +38,7 @@
                 <td>${orderItemDTOT.topping}</td>
                 <td>${orderItemDTOT.quantity} stk</td>
                 <td>${orderItemDTOT.price}</td>
+
             </tr>
             </c:forEach>
             </tr>

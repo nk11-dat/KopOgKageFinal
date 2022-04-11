@@ -1,31 +1,37 @@
 package dat.startcode.control;
 
 import dat.startcode.model.DTO.CupcakeDTO;
+import dat.startcode.model.DTO.OrderItemDTOT;
 import dat.startcode.model.config.ApplicationStart;
 import dat.startcode.model.entities.Bottom;
 import dat.startcode.model.entities.Topping;
 import dat.startcode.model.exceptions.DatabaseException;
-import dat.startcode.model.persistence.ConnectionPool;
-import dat.startcode.model.persistence.CupcakeMapper;
+import dat.startcode.model.persistence.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "CupcakeOrder", urlPatterns = "/CupcakeOrder")
 public class CupcakeOrder extends HttpServlet
 {
     private CupcakeMapper cupcakeMapper;
-
+    private OrderItemMapper orderItemMapper;
+    private ToppingMapper toppingMapper;
+    private BottomMapper bottomMapper;
 
     public void init() throws ServletException
     {
 
         ConnectionPool connectionPool = ApplicationStart.getConnectionPool();
         cupcakeMapper = new CupcakeMapper(connectionPool);
+        orderItemMapper = new OrderItemMapper(connectionPool);
+        toppingMapper = new ToppingMapper(connectionPool);
+        bottomMapper = new BottomMapper(connectionPool);
 
     }
 
@@ -71,12 +77,34 @@ public class CupcakeOrder extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-    request.getParameterValues("topping");
+        HttpSession session = request.getSession();
+
+        List<OrderItemDTOT> OrderItemList = (List<OrderItemDTOT>) session.getAttribute("OrderItemList");
+
+        if (OrderItemList == null) {
+            OrderItemList = new ArrayList<>();
+        }
 
 
-    int toppingValue = Integer.parseInt(request.getParameter("bottom"));
 
+    int bottomValue = Integer.parseInt(request.getParameter("bottom"));
+    int toppingValue = Integer.parseInt(request.getParameter("topping"));
+    int quantityValue = Integer.parseInt(request.getParameter("quantity"));
 
-        request.getRequestDispatcher("WEB-INF/orderOverviewT.jsp").forward(request, response);
+        try {
+            Topping tempTopping = toppingMapper.getToppingbyId(toppingValue);
+            Bottom tempBottom = bottomMapper.getBottomById(bottomValue);
+
+            int cupcakePrice = quantityValue*(tempTopping.getPrice() + tempBottom.getPrice());
+
+            OrderItemDTOT temp = new OrderItemDTOT(tempBottom.getFlavor(),tempTopping.getFlavor(),quantityValue, cupcakePrice);
+
+            OrderItemList.add(temp);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+
+        session.setAttribute("OrderItemList", OrderItemList);
+        request.getRequestDispatcher("WEB-INF/order.jsp").forward(request, response);
     }
 }
