@@ -1,6 +1,7 @@
 package dat.startcode.control;
 
 import dat.startcode.model.DTO.OrderOverviewHeaderAdminDTO;
+import dat.startcode.model.DTO.UserIdTotalSumDTO;
 import dat.startcode.model.config.ApplicationStart;
 import dat.startcode.model.entities.User;
 import dat.startcode.model.exceptions.DatabaseException;
@@ -61,11 +62,22 @@ public class OrderOverviewAdmin extends HttpServlet {
             //TODO: Hvad mener jon/nikolaj om det?
         int orderId = Integer.parseInt(request.getParameter("orderid"));  //Hent brugerobjekt ud fra session scope
 
+
         try
         {
-            boolean result = orderMapper.setOrderStatusById(orderId);
-            if (!result)
-                request.setAttribute("insufficient_funds", "Kunden har ikke nok penge til at kunne betale!");
+            UserIdTotalSumDTO userIdAndTotalSum = orderMapper.getUserIdAndTotalSumByOrderId(orderId);
+            int userId = userIdAndTotalSum.getUserId();
+            int price = userIdAndTotalSum.getTotalSum();
+
+            int balance = orderMapper.getUserBalanceByUserId(userId);
+            if (balance >= price)
+            {
+                orderMapper.updateUserBalanceByUserId(userId, price);
+                orderMapper.setOrderStatusById(orderId);
+            }
+            else {
+                request.setAttribute("insufficient_funds", "Kunden har ikke nok penge til betale for orderen!");
+            }
         }
         catch (DatabaseException e)
         {

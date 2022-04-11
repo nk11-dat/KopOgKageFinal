@@ -19,3 +19,7 @@ th, td {
 .table-danger{
     --bs-table-bg: lightpink!important;
 }
+
+.center-Text{
+    text-align: center!important;
+}

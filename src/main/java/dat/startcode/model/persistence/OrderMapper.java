@@ -14,11 +14,10 @@ import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderMapper implements IOrderMapper{
+public class OrderMapper implements IOrderMapper {
     private ConnectionPool connectionPool;
 
-    public OrderMapper(ConnectionPool connectionPool)
-    {
+    public OrderMapper(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
@@ -38,22 +37,18 @@ public class OrderMapper implements IOrderMapper{
                 "USING(bottom_id) " +
                 "WHERE cupcake.order.order_id = ?";
 
-        try (Connection connection = connectionPool.getConnection())
-        {
-            try (PreparedStatement ps = connection.prepareStatement(sql))
-            {
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setInt(1, orderId);
                 ResultSet rs = ps.executeQuery();
-                while (rs.next())
-                {
+                while (rs.next()) {
                     int quantity = rs.getInt("quantity");
                     String flavor = rs.getString("cupcake");
                     OrderItemOverviewAdminDTO newOrderItem = new OrderItemOverviewAdminDTO(quantity, flavor);
                     orderItemsList.add(newOrderItem);
                 }
             }
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             throw new DatabaseException(ex, "Fejl under indlæsning af 'orderItems' fra databasen");
         }
         return orderItemsList;
@@ -72,13 +67,10 @@ public class OrderMapper implements IOrderMapper{
                 "INNER JOIN orderitem " +
                 "USING(order_id);";
 
-        try (Connection connection = connectionPool.getConnection())
-        {
-            try (PreparedStatement ps = connection.prepareStatement(sql))
-            {
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ResultSet rs = ps.executeQuery();
-                while (rs.next())
-                {
+                while (rs.next()) {
                     int orderId = rs.getInt("order_id");
                     String username = rs.getString("username");
                     int totalsum = rs.getInt("total_sum");
@@ -89,8 +81,7 @@ public class OrderMapper implements IOrderMapper{
                     orderList.add(newOrderHeader);
                 }
             }
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             throw new DatabaseException(ex, "Fejl under indlæsning af ordere fra databasen");
         }
         return orderList;
@@ -101,86 +92,49 @@ public class OrderMapper implements IOrderMapper{
         Logger.getLogger("web").log(Level.INFO, "");
         boolean result = false;
 
-        //Hent user_id og total_sum ud fra order tabellen
-        UserIdTotalSumDTO userIdAndTotalSum = getUserIdAndTotalSumByOrderId(orderId);
-//        int userId = getUserIdByOrderId(orderId); //hent userid ud fra den valgte order(orderid)
-//        int totalSum = getTotalsumByOrderId(orderId); //hent order.totalsum ud fra valgte order(orderid)
+        String sql = "UPDATE cupcake.order SET status = 1 WHERE cupcake.order.order_id = ?;";
 
-        if (updateUserBalanceByUserId(userIdAndTotalSum.getUserId(), userIdAndTotalSum.getTotalSum())) //hvis en bruger kunne betale
-        {
-            String sql = "UPDATE cupcake.order SET status = 1 WHERE cupcake.order.order_id = ?;";
-
-            try (Connection connection = connectionPool.getConnection()) {
-                try (PreparedStatement ps = connection.prepareStatement(sql)) {
-                    ps.setInt(1, orderId);
-                    int rowsAffected = ps.executeUpdate();
-                    if (rowsAffected == 1){
-                        result = true;
-                    } else {
-                        throw new DatabaseException("Mere/mindre end 1 row affected da order med id = " + orderId + ". Skulle updates! (check evt. databasen for fejl)");
-                    }
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setInt(1, orderId);
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected == 1) {
+                    result = true;
+                } else {
+                    throw new DatabaseException("Mere/mindre end 1 row affected da order med id = " + orderId + ". Skulle updates! (check evt. databasen for fejl)");
                 }
-            } catch (SQLException ex) {
-                throw new DatabaseException("Kunne ikke opdatere order status for order med id = " + orderId);
             }
+        } catch (SQLException ex) {
+            throw new DatabaseException("Kunne ikke opdatere order status for order med id = " + orderId);
         }
 
         return result;
     }
 
-    public UserIdTotalSumDTO getUserIdAndTotalSumByOrderId(int orderid) throws DatabaseException {
+    public UserIdTotalSumDTO getUserIdAndTotalSumByOrderId(int orderId) throws DatabaseException {
         Logger.getLogger("web").log(Level.INFO, "");
         UserIdTotalSumDTO idAndSum = null;
 
         String sql = "SELECT user_id, total_sum FROM cupcake.order WHERE order_id = ?;";
 
-        try (Connection connection = connectionPool.getConnection())
-        {
-            try (PreparedStatement ps = connection.prepareStatement(sql))
-            {
-                ps.setInt(1, orderid);
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setInt(1, orderId);
                 ResultSet rs = ps.executeQuery();
-                while (rs.next())
-                {
+                while (rs.next()) {
                     int userId = rs.getInt("user_id");
                     int totalSum = rs.getInt("total_sum");
 
                     idAndSum = new UserIdTotalSumDTO(userId, totalSum);
                     if (idAndSum == null)
-                        throw new DatabaseException("Fejl under indlæsning af user_id/total_sum fra databasen, fandt ingen order ud fra orderid: " + orderid);
+                        throw new DatabaseException("Fejl under indlæsning af user_id/total_sum fra databasen, fandt ingen order ud fra orderid: " + orderId);
                 }
             }
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             throw new DatabaseException(ex, "Fejl Kunne ikke oprette forbindelse til databasen i metode: getUserIdAndTotalSumByOrderId");
         }
 
         return idAndSum;
-    }
-
-    private boolean updateUserBalanceByUserId(int userid, int price) throws DatabaseException {
-        //TODO: Burde denne ligge i UserMapper istedet?...
-            //burde den vel nok, så skal der bare oprettes et UserMapper objekt når man skal kalder metoden fra andre Mappere.
-        Logger.getLogger("web").log(Level.INFO, "");
-        boolean result = false;
-
-        String sql = "UPDATE user SET balance = IF(balance >= ?, balance-?, balance) WHERE user_id = ?;";
-
-        try (Connection connection = connectionPool.getConnection()) {
-            try (PreparedStatement ps = connection.prepareStatement(sql)) {
-                ps.setInt(1, price);
-                ps.setInt(2, price);
-                ps.setInt(3, userid);
-                int rowsAffected = ps.executeUpdate();
-                if (rowsAffected == 1){
-                    result = true;
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DatabaseException("Kunne ikke opdatere user balance for userid = " + userid);
-        }
-
-        return result;
     }
 
     @Override
@@ -196,7 +150,7 @@ public class OrderMapper implements IOrderMapper{
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setInt(1, orderid);
                 int rowsAffected = ps.executeUpdate();
-                if (rowsAffected >= 1){
+                if (rowsAffected >= 1) {
                     result = true;
                 } else {
                     throw new DatabaseException("Underligt mindre end 1 row affected med order med id = " + orderid + " blev slettet fra orderitem tabellen. (check evt. databasen for fejl)");
@@ -209,7 +163,7 @@ public class OrderMapper implements IOrderMapper{
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setInt(1, orderid);
                 int rowsAffected = ps.executeUpdate();
-                if (rowsAffected == 1){
+                if (rowsAffected == 1) {
                     result = true;
                 } else {
                     throw new DatabaseException("Underligt flere/mindre end 1 row affected med order med id = " + orderid + " blev slettet fra order tabellen (check evt. databasen for fejl)");
@@ -217,6 +171,58 @@ public class OrderMapper implements IOrderMapper{
             }
         } catch (SQLException ex) {
             throw new DatabaseException("Kunne ikke slette order og orderitem for order med id = " + orderid);
+        }
+
+        return result;
+    }
+
+    @Override
+    public int getUserBalanceByUserId(int userId) throws DatabaseException {
+        Logger.getLogger("web").log(Level.INFO, "");
+        int result = -1;
+
+        String sql = "SELECT balance FROM user WHERE user_id = ?;";
+
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setInt(1, userId);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    result = rs.getInt("balance");
+
+                    if (result == -1)
+                        throw new DatabaseException("Fejl under indlæsning af user.balance fra databasen, fandt ingen user ud fra userId: " + userId);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DatabaseException(ex, "Fejl Kunne ikke oprette forbindelse til databasen i metode: getUserBalanceByUserId");
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean updateUserBalanceByUserId(int userId, int price) throws DatabaseException {
+        Logger.getLogger("web").log(Level.INFO, "");
+        boolean result = false;
+
+        try (Connection connection = connectionPool.getConnection()) {
+
+            String sql = "UPDATE user SET balance = balance-? " +
+                    "WHERE user_id = ?;";
+
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setInt(1, price);
+                ps.setInt(2, userId);
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected == 1) {
+                    result = true;
+                } else {
+                    throw new DatabaseException(rowsAffected + " row affected med order med id = " + userId + " blev updated fra user tabellen. (check evt. databasen for fejl)");
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DatabaseException("Kunne ikke updatere user balance for user med id = " + userId);
         }
 
         return result;
@@ -263,7 +269,7 @@ public class OrderMapper implements IOrderMapper{
 
 /*
 //skal aligevel ikke bruges, ellers smid i usermapper
-public User getUserByUserId(int userid) throws DatabaseException {
+public User getUserByUserId(int userId) throws DatabaseException {
         Logger.getLogger("web").log(Level.INFO, "");
         User user = null;
         String sql = "SELECT * FROM user " +
@@ -271,7 +277,7 @@ public User getUserByUserId(int userid) throws DatabaseException {
 
         try (Connection connection = connectionPool.getConnection()) {
             try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setInt(1, userid);
+                ps.setInt(1, userId);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     int userId = rs.getInt("user_id");
@@ -285,7 +291,7 @@ public User getUserByUserId(int userid) throws DatabaseException {
                 }
             }
         } catch (SQLException ex) {
-            throw new DatabaseException(ex, "Ingen bruger blev fundet med userid=" + userid);
+            throw new DatabaseException(ex, "Ingen bruger blev fundet med userId=" + userId);
         }
         return user;
     }

@@ -14,7 +14,7 @@
 
     <jsp:body>
 
-        <h1 class="center">${requestScope.insufficient_funds}</h1>
+        <h1 class="center-Text">${requestScope.insufficient_funds}</h1>
 
         <h3>Her kan du se alle ordere: </h3>
 
