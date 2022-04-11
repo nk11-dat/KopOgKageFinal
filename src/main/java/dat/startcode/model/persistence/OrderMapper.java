@@ -159,6 +159,8 @@ public class OrderMapper implements IOrderMapper{
     }
 
     private boolean updateUserBalanceByUserId(int userid, int price) throws DatabaseException {
+        //TODO: Burde denne ligge i UserMapper istedet?...
+            //burde den vel nok, så skal der bare oprettes et UserMapper objekt når man skal kalder metoden fra andre Mappere.
         Logger.getLogger("web").log(Level.INFO, "");
         boolean result = false;
 
