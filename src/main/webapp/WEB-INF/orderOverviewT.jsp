@@ -15,18 +15,17 @@
 
     <jsp:body>
 
-        <form method="get">
-
-
-
-        <table class="table table-striped">
-            <thead>
+        <form action="Thanks" method="get">
+        <table class="table">
+            <thead class="table-danger">
             <tr>
                 <th scope="col"></th>
                 <th scope="col">Bund</th>
                 <th scope="col">Top</th>
                 <th scope="col">Antal</th>
                 <th scope="col">Pris</th>
+                <th scope="col"></th>
+
             </tr>
             </thead>
             <tbody>
@@ -38,9 +37,6 @@
                 <td>${orderItemDTOT.topping}</td>
                 <td>${orderItemDTOT.quantity} stk</td>
                 <td>${orderItemDTOT.price}</td>
-                <td></td>
-                <td></td>
-                <td></td>
             </tr>
             </c:forEach>
             </tr>
@@ -49,9 +45,13 @@
         </table>
             <h4>Total pris: ${requestScope.totalPrice}</h4>
 
-        <button type="button" class="btn btn-primary" confirm="Are your sure?">Bekræft</button>
+            <button type="submit" class="btn btn-danger" style="background-color: lightpink">
+                Bekræft ordre
+            </button>
 
-        </form>
+            </form>
+
+
     </jsp:body>
 
 </t:pagetemplate>
