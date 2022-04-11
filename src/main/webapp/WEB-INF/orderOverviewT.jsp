@@ -16,39 +16,42 @@
 
     <jsp:body>
 
-        <form method="get">
+        <form action="Thanks" method="get">
+        <table class="table">
+            <thead class="table-danger">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Bund</th>
+                <th scope="col">Top</th>
+                <th scope="col">Antal</th>
+                <th scope="col">Pris</th>
+                <th scope="col"></th>
 
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <c:forEach var="orderItemDTOT" items="${requestScope.orderItemDTOList}">
+            <tr>
+                <th scope="row"></th>
+                <td>${orderItemDTOT.bottom}</td>
+                <td>${orderItemDTOT.topping}</td>
+                <td>${orderItemDTOT.quantity} stk</td>
+                <td>${orderItemDTOT.price}</td>
+            </tr>
+            </c:forEach>
+            </tr>
 
-            <table class="table table-striped">
-                <thead class="table-danger">
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Bund</th>
-                    <th scope="col">Top</th>
-                    <th scope="col">Antal</th>
-                    <th scope="col">Pris:</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <c:forEach var="orderItemDTOT" items="${requestScope.orderItemDTOList}">
-                <tr>
-                    <th scope="row"></th>
-                    <td>${orderItemDTOT.bottom}</td>
-                    <td>${orderItemDTOT.topping}</td>
-                    <td>${orderItemDTOT.quantity} stk</td>
-                    <td>${orderItemDTOT.price},-</td>
-                </tr>
-                </c:forEach>
-                </tr>
+            </tbody>
+        </table>
+            <h4>Total pris: ${requestScope.totalPrice}</h4>
 
-                </tbody>
-            </table>
-            <div>
-                <h4>Total pris: ${requestScope.totalPrice}</h4>
-                <button type="button" class="btn btn-black" style="background-color: lightpink" confirm="Are your sure?">Bekræft</button>
-            </div>
-        </form>
+            <button type="submit" class="btn btn-danger" style="background-color: lightpink">
+                Bekræft ordre
+            </button>
+
+            </form>
+
     </jsp:body>
 
 </t:pagetemplate>
