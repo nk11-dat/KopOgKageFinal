@@ -38,10 +38,10 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <c:if test="${sessionScope.user == null }">
-                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/login.jsp">Login</a>
+                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/index.jsp">Login</a>
                     </c:if>
                     <c:if test="${sessionScope.user.roleId == 2}">
-                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverview">Ordre</a>
+                        <a class="nav-item nav-link" href="${pageContext.request.contextPath}/OrderOverviewAdmin">Order oversigt</a>
                     </c:if>
                     <c:if test="${sessionScope.user.roleId == 1}">
                         <a class="nav-item nav-link" href="${pageContext.request.contextPath}/CupcakeOrder">Bestilling</a>
