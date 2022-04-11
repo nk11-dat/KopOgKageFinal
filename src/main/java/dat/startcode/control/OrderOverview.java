@@ -34,7 +34,6 @@ public class OrderOverview extends HttpServlet {
         HttpSession session = request.getSession();
         response.setContentType("text/html");
         List<OrderOverviewHeaderAdminDTO> orderDTOList = null;
-
         try
         {
             User user = (User) session.getAttribute("user");

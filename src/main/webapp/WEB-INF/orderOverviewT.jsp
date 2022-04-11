@@ -26,7 +26,7 @@
                     <th scope="col">Bund</th>
                     <th scope="col">Top</th>
                     <th scope="col">Antal</th>
-                    <th scope="col">Pris</th>
+                    <th scope="col">Pris:</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -37,8 +37,7 @@
                     <td>${orderItemDTOT.bottom}</td>
                     <td>${orderItemDTOT.topping}</td>
                     <td>${orderItemDTOT.quantity} stk</td>
-                    <td>${orderItemDTOT.price}</td>
-                    <td>${orderItemDTOT.price}</td>
+                    <td>${orderItemDTOT.price},-</td>
                 </tr>
                 </c:forEach>
                 </tr>
@@ -47,7 +46,7 @@
             </table>
             <div>
                 <h4>Total pris: ${requestScope.totalPrice}</h4>
-                <button type="button" class="btn btn-primary" confirm="Are your sure?">Bekræft</button>
+                <button type="button" class="btn btn-black" style="background-color: lightpink" confirm="Are your sure?">Bekræft</button>
             </div>
         </form>
     </jsp:body>

@@ -16,11 +16,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(name = "CupcakeOrder", urlPatterns = "/CupcakeOrder")
-public class CupcakeOrder extends HttpServlet {
+public class CupcakeOrder extends HttpServlet
+{
     private CupcakeMapper cupcakeMapper;
 
 
-    public void init() throws ServletException {
+    public void init() throws ServletException
+    {
 
         ConnectionPool connectionPool = ApplicationStart.getConnectionPool();
         cupcakeMapper = new CupcakeMapper(connectionPool);
@@ -29,22 +31,28 @@ public class CupcakeOrder extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
 
         response.setContentType("text/html");
         List<Topping> cupcakeToppingList = null;
         List<Bottom> cupcakeBottomList = null;
 
-        try {
+        try
+        {
             cupcakeToppingList = cupcakeMapper.getToppings();
-        } catch (DatabaseException e) {
+        } catch (DatabaseException e)
+        {
             e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             e.printStackTrace();
         }
-        try {
+        try
+        {
             cupcakeBottomList = cupcakeMapper.getBottoms();
-        } catch (DatabaseException e) {
+        } catch (DatabaseException e)
+        {
             e.printStackTrace();
         }
 
@@ -52,8 +60,8 @@ public class CupcakeOrder extends HttpServlet {
         servletContext.setAttribute("cupcakeToppingList", cupcakeToppingList);
         servletContext.setAttribute("cupcakeBottomList", cupcakeBottomList);
 
-      //  request.setAttribute("cupcakeToppingList", cupcakeToppingList);
-      // request.setAttribute("cupcakeBottomList", cupcakeBottomList);
+        //  request.setAttribute("cupcakeToppingList", cupcakeToppingList);
+        // request.setAttribute("cupcakeBottomList", cupcakeBottomList);
 
         request.getRequestDispatcher("WEB-INF/order.jsp").forward(request, response);
 
@@ -61,9 +69,14 @@ public class CupcakeOrder extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+    request.getParameterValues("topping");
 
 
+    int toppingValue = Integer.parseInt(request.getParameter("bottom"));
 
+
+        request.getRequestDispatcher("WEB-INF/orderOverviewT.jsp").forward(request, response);
     }
 }

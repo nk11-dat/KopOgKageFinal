@@ -23,11 +23,11 @@
             <table class="table">
                 <div class="dropdown">
                     Topping
-                    <select class="form-select" aria-label="Default select example">
+                    <select name="topping" class="form-select " aria-label="Default select example">
                         <option selected>Her vælger du din topping</option>
                         <c:forEach var="cupcakeDTO" items="${applicationScope.cupcakeToppingList}">
 
-                            <option value="1">${cupcakeDTO.flavor} (${cupcakeDTO.price} kr.)</option>
+                            <option value="${cupcakeDTO.toppingId}">${cupcakeDTO.flavor} (${cupcakeDTO.price} kr.)</option>
 
                         </c:forEach>
                     </select>
@@ -37,27 +37,46 @@
                 <table class="table">
                     <div class="dropdown">
                         Bund
-                        <select class="form-select" aria-label="Default select example">
+                        <select name="bottom" class="form-select" aria-label="Default select example">
                             <option selected>Her vælger du din bund</option>
                             <c:forEach var="cupcakeDTO" items="${applicationScope.cupcakeBottomList}">
 
-                                <option value="1">${cupcakeDTO.flavor} (${cupcakeDTO.price} kr.)</option>
+                                <option value="${cupcakeDTO.bottomId}">${cupcakeDTO.flavor} (${cupcakeDTO.price} kr.)</option>
 
                             </c:forEach>
                         </select>
 
                     </div>
                 </table>
-
-                    <input class="form-control" min="0" max="8" type="number" id="quantity" name="quantity"><br>
-                    <label for="quantity">Vælg antal Cupcakes</label><br><br>
+                <br>
 
 
+                <div class="input-group  ">
+                    <button onclick="numberFunction('-') " style="min-width: 2.5rem" class="btn btn-decrement btn-outline-secondary btn-minus" type="button"><strong>−</strong></button>
+                    <input  name="quantity" id="number" type="number" inputmode="decimal" style="text-align: center" class="form-control " placeholder="0">
+                    <button onclick="numberFunction('+') " style="min-width: 2.5rem" class="btn btn-increment btn-outline-secondary btn-plus" type="button"><strong>+</strong></button>
+                </div>
+                <br><br>
 
-                <button type="button" class="btn btn-primary" formaction="/OrderOverviewUser">Bekræft</button>
+
+
+                <button type="submit" class="btn btn-primary" value="submit" formaction="CupcakeOrder" formmethod="post" >Læg i kurv</button>
+                <button type="submit" class="btn btn-primary" value="submit" formaction="CupcakeOrder" formmethod="post" >Gå til kurv</button>
                  </table>
         </form>
 
-
+        <script>
+            function numberFunction(type)
+            {
+                var input;
+                input = document.getElementById("number");
+                if (type == '+')
+                {
+                    input.value++;
+                }else if (input.value >= 1) {
+                    input.value--;
+                }
+            }
+        </script>
     </jsp:body>
 </t:pagetemplate>
