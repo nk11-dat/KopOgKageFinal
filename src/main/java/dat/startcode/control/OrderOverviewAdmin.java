@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@WebServlet(name = "OrderOverview", urlPatterns = "/OrderOverview")
-public class OrderOverview extends HttpServlet {
+@WebServlet(name = "OrderOverviewAdmin", urlPatterns = "/OrderOverviewAdmin")
+public class OrderOverviewAdmin extends HttpServlet {
     private OrderMapper orderMapper;
 
     @Override
@@ -29,7 +29,7 @@ public class OrderOverview extends HttpServlet {
         orderMapper = new OrderMapper(connectionPool);
     }
 
-    @Override
+    @Override //Indlæser OrderOverviewAdmin med data fra mySQL hvis man er logged ind som admin
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         response.setContentType("text/html");
@@ -52,18 +52,20 @@ public class OrderOverview extends HttpServlet {
         request.getRequestDispatcher("WEB-INF/adminIndex.jsp").forward(request, response);
     }
 
-    @Override //Bruges til at opdatere order status fra adminIndex.jsp når der klikkes på [Button]
+    @Override //Bruges til at opdatere order status fra adminIndex.jsp når der klikkes på [Godkend]
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("text/html");
 
         //TODO: Brug en Orde- entity istedet for bare at benytte orderId?
             //TODO: Hvad mener jon/nikolaj om det?
-        int orderId = Integer.parseInt(request.getParameter("orderid"));  // hent brugerobjekt ud fra session scope
+        int orderId = Integer.parseInt(request.getParameter("orderid"));  //Hent brugerobjekt ud fra session scope
 
         try
         {
-            orderMapper.setOrderStatusById(orderId);
+            boolean result = orderMapper.setOrderStatusById(orderId);
+            if (!result)
+                request.setAttribute("insufficient_funds", "Kunden har ikke nok penge til at kunne betale!");
         }
         catch (DatabaseException e)
         {
@@ -71,7 +73,7 @@ public class OrderOverview extends HttpServlet {
             request.setAttribute("errormessage", e.getMessage());
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
-        doGet(request, response);
+        doGet(request, response); //Indlæs siden igen
 //        request.getRequestDispatcher("adminIndex.jsp").forward(request, response);
     }
 }
