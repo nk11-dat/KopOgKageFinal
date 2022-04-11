@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static dat.startcode.model.services.Authentication.isRoleAllowed;
+
 @WebServlet(name = "OrderOverviewAdmin", urlPatterns = "/OrderOverviewAdmin")
 public class OrderOverviewAdmin extends HttpServlet {
     private OrderMapper orderMapper;
@@ -37,11 +39,8 @@ public class OrderOverviewAdmin extends HttpServlet {
         List<OrderOverviewHeaderAdminDTO> orderDTOList = null;
         try
         {
-            User user = (User) session.getAttribute("user");
-            if (user != null && user.getRoleId() == 2)
+            if (isRoleAllowed(2, request))
                 orderDTOList = orderMapper.getAllOrders();
-            else
-                throw new DatabaseException("Du skal være logget ind som admin for at tilgå denne side!");
         }
         catch (DatabaseException e)
         {

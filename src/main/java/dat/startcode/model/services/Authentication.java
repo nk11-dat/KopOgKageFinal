@@ -1,13 +1,20 @@
 package dat.startcode.model.services;
 
+import dat.startcode.model.entities.User;
+import dat.startcode.model.exceptions.DatabaseException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class Authentication
 {
-    public static boolean isRoleAllowed(String role, HttpServletRequest request)
-    {
-        // Todo: extract user object from session scope and check role
+    public static boolean isRoleAllowed(int requiredRoleId, HttpServletRequest request) throws DatabaseException {
 
-        return true;
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user != null && user.getRoleId() == requiredRoleId)
+            return true;
+        else
+            throw new DatabaseException("Du har ikke de påkrævede rettigheder til at tilgå denne side!");
     }
 }
