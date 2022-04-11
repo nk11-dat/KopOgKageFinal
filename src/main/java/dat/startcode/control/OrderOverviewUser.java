@@ -37,20 +37,14 @@ public class OrderOverviewUser extends HttpServlet {
         List<OrderItemDTOT> orderItemDTOList = null;
         int totalPrice = 0;
 
-        try
-        {
-            HttpSession session = request.getSession();
-            session.getAttribute("bla");
-            // TODO: mangler request getAttribut id fra bestillings side
-            orderItemDTOList = orderMapperT.getOrderItemByOrderId(1);
-            totalPrice = orderMapperT.getTotalSumByOrderId(1);
+        HttpSession session = request.getSession();
+        session.getAttribute("bla");
+        // TODO: mangler request getAttribut id fra bestillings side
+        orderItemDTOList = (List<OrderItemDTOT>) session.getAttribute("OrderItemList");
+        for (OrderItemDTOT orderItemDTOT : orderItemDTOList) {
+            totalPrice += orderItemDTOT.getPrice();
         }
-        catch (DatabaseException e)
-        {
-            Logger.getLogger("web").log(Level.SEVERE, e.getMessage());
-            request.setAttribute("fejlbesked", e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
-        }
+        //  totalPrice = orderMapperT.getTotalSumByOrderId(1);
         request.setAttribute("orderItemDTOList", orderItemDTOList);
         request.setAttribute("totalPrice", totalPrice);
         request.getRequestDispatcher("WEB-INF/orderOverviewT.jsp").forward(request, response);

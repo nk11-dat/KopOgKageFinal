@@ -61,7 +61,6 @@
 
 
                 <button type="submit" class="btn btn-primary" value="submit" formaction="CupcakeOrder" formmethod="post" >Læg i kurv</button>
-                <button type="submit" class="btn btn-primary" value="submit" formaction="CupcakeOrder" formmethod="post" >Gå til kurv</button>
                  </table>
         </form>
 
