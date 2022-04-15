@@ -16,7 +16,7 @@
 
     <jsp:body>
 
-        <form action="Thanks" method="get">
+        <form action="ConfirmOrder" method="post">
         <table class="table">
             <thead class="table-danger">
             <tr>

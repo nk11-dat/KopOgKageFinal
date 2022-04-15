@@ -64,16 +64,16 @@
             </thead>
             <tbody>
             <tr>
-                <c:forEach var="orderItemDTOT" items="${requestScope.orderItemDTOList}">
+                <c:forEach var="orderitemDTOList" items="${requestScope.orderItemDTOList}">
             <tr>
-                <td scope="row">${orderItemDTOT.bottom} - ${orderItemDTOT.topping}</td>
-                <td>${orderItemDTOT.quantity} stk</td>
-                <td>${orderItemDTOT.price} kr</td>
+                <td scope="row">${orderitemDTOList.bottom} - ${orderitemDTOList.topping}</td>
+                <td>${orderitemDTOList.quantity} stk</td>
+                <td>${orderitemDTOList.price} kr</td>
             </tr>
             </c:forEach>
             </tr>
             <tr>
-                <th scope="col">Total pris: ${requestScope.totalPrice}</th>
+                <th colspan="3">Total pris:  ${requestScope.totalSum} kr</th>
             </tr>
             </tbody>
         </table>

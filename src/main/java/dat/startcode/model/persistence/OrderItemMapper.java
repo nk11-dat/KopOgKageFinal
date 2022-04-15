@@ -3,6 +3,7 @@ package dat.startcode.model.persistence;
 import dat.startcode.model.DTO.OrderInformationDTO;
 import dat.startcode.model.DTO.OrderItemDTOT;
 import dat.startcode.model.entities.Order;
+import dat.startcode.model.entities.Orderitem;
 import dat.startcode.model.entities.User;
 import dat.startcode.model.exceptions.DatabaseException;
 
@@ -79,6 +80,90 @@ public class OrderItemMapper
         }
         return orderItemDTOT;
     }
+
+
+    public List<Orderitem> getAllOrederitembyOrderId(int orderId) throws DatabaseException
+    {
+        Logger.getLogger("web").log(Level.INFO, "");
+
+        List<Orderitem> orderitemList = new ArrayList<>();
+
+        String sql = "SELECT * FROM cupcake.orderitem where order_id = ?";
+
+        try (Connection connection = connectionPool.getConnection())
+        {
+            try (PreparedStatement ps = connection.prepareStatement(sql))
+            {
+                ps.setInt(1, orderId);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next())
+                {
+                    int orderitemId = rs.getInt("orderitem_id");
+                    int toppingId = rs.getInt("topping_id");
+                    int bottomId = rs.getInt("bottom_id");
+                    int quantity = rs.getInt("quantity");
+                    orderitemList.add(new Orderitem(orderitemId, orderId, toppingId, bottomId, quantity));
+                }
+            }
+        } catch (SQLException ex)
+        {
+            throw new DatabaseException(ex, "Fejl under indlæsning af 'orderItems' fra databasen");
+        }
+        return orderitemList;
+    }
+
+    public int getBottomIdByFlavor(String bottomFlavor) throws DatabaseException
+    {
+        Logger.getLogger("web").log(Level.INFO, "");
+        int bottomId = 0;
+
+        String sql = "SELECT bottom_id FROM cupcake.bottom where flavor = ?";
+
+        try (Connection connection = connectionPool.getConnection())
+        {
+            try (PreparedStatement ps = connection.prepareStatement(sql))
+            {
+                ps.setString(1, bottomFlavor);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next())
+                {
+                    bottomId = rs.getInt("bottom_id");
+                }
+            }
+        } catch (SQLException ex)
+        {
+            throw new DatabaseException(ex, "Fejl under indlæsning af bootm_id fra databasen");
+        }
+        return bottomId;
+    }
+
+    public int getToppingIdByFlavor(String toppingFlavor) throws DatabaseException
+    {
+        Logger.getLogger("web").log(Level.INFO, "");
+        int toppingId = 0;
+
+        String sql = "SELECT topping_id FROM cupcake.topping where flavor = ?";
+
+        try (Connection connection = connectionPool.getConnection())
+        {
+            try (PreparedStatement ps = connection.prepareStatement(sql))
+            {
+                ps.setString(1, toppingFlavor);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next())
+                {
+                    toppingId = rs.getInt("topping_id");
+                }
+            }
+        } catch (SQLException ex)
+        {
+            throw new DatabaseException(ex, "Fejl under indlæsning af topping_id fra databasen");
+        }
+        return toppingId;
+    }
+
+
+
 
 
 }

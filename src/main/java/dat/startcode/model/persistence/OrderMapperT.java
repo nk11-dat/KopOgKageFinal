@@ -3,6 +3,7 @@ package dat.startcode.model.persistence;
 import dat.startcode.model.DTO.OrderInformationDTO;
 import dat.startcode.model.DTO.OrderItemDTOT;
 import dat.startcode.model.entities.Order;
+import dat.startcode.model.entities.Orderitem;
 import dat.startcode.model.entities.User;
 import dat.startcode.model.exceptions.DatabaseException;
 
@@ -95,20 +96,19 @@ public class OrderMapperT implements IOrderMapperT
     }
 
     @Override
-    public Order confirmOrder(int userId, int status, int totalSum, Date date) throws DatabaseException
+    public Order confirmOrder(int userId, boolean status, int totalSum) throws DatabaseException
     {
         Logger.getLogger("web").log(Level.INFO, "");
-        Order order;
-        int newId = 0;
-        String sql = "insert into user (user_id, status, total_sum, order_date) values (?, ?, ?, ?)";
+        Order order = null;
+        int newOrderId = 0;
+        String sql = "insert into cupcake.order (user_id, status, total_sum, order_date) values (?, ?, ?, NOW())";
         try (Connection connection = connectionPool.getConnection())
         {
             try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
             {
                 ps.setInt(1, userId);
-                ps.setInt(1, status);
-                ps.setInt(1, totalSum);
-                ps.setDate(4, (java.sql.Date) date);
+                ps.setBoolean(2, status);
+                ps.setInt(3, totalSum);
 
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected == 1) {
@@ -116,8 +116,8 @@ public class OrderMapperT implements IOrderMapperT
                 }
                 ResultSet idResultset = ps.getGeneratedKeys();
                 if (idResultset.next()) {
-                    newId = idResultset.getInt(1);
-                    order = new Order(newId, userId, status, totalSum, date);
+                    newOrderId = idResultset.getInt(1);
+                    order = new Order(newOrderId, userId, status, totalSum);
                 } else
                 {
                     throw new DatabaseException("Bestillingen kunne ikke oprettes.");
@@ -125,9 +125,45 @@ public class OrderMapperT implements IOrderMapperT
             }
         } catch (SQLException | DatabaseException ex)
         {
-            throw new DatabaseException(ex, "Could not insert username into database");
+            throw new DatabaseException(ex, "Orderen kunne ikke sættes i databasen");
         }
         return order;
+    }
+
+
+    public Orderitem insertOrderItem(int orderId, int toppingId, int bottomId, int quantity) throws DatabaseException
+    {
+        Logger.getLogger("web").log(Level.INFO, "");
+        Orderitem orderitem = null;
+        int newOrderItemId = 0;
+        String sql = "insert into cupcake.orderitem (order_id, topping_id, bottom_id, quantity) values (?, ?, ?, ?)";
+        try (Connection connection = connectionPool.getConnection())
+        {
+            try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
+            {
+                ps.setInt(1, orderId);
+                ps.setInt(2, toppingId);
+                ps.setInt(3, bottomId);
+                ps.setInt(4, quantity);
+
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected == 1) {
+
+                }
+                ResultSet idResultset = ps.getGeneratedKeys();
+                if (idResultset.next()) {
+                    newOrderItemId = idResultset.getInt(1);
+                    orderitem = new Orderitem(newOrderItemId, orderId, toppingId, bottomId, quantity);
+                } else
+                {
+                    throw new DatabaseException("Orderitem kunne ikke oprettes.");
+                }
+            }
+        } catch (SQLException | DatabaseException ex)
+        {
+            throw new DatabaseException(ex, "Orderitem kunne ikke sættes i databasen");
+        }
+        return orderitem;
     }
 
     @Override
