@@ -25,8 +25,7 @@ public class OrderOverviewUser extends HttpServlet {
     private OrderMapperT orderMapperT;
 
     @Override
-    public void init() throws ServletException
-    {
+    public void init() throws ServletException {
         ConnectionPool connectionPool = ApplicationStart.getConnectionPool();
         orderMapperT = new OrderMapperT(connectionPool);
     }
@@ -40,8 +39,10 @@ public class OrderOverviewUser extends HttpServlet {
         HttpSession session = request.getSession();
         session.getAttribute("bla");
         orderItemDTOList = (List<OrderItemDTOT>) session.getAttribute("OrderItemList");
-        for (OrderItemDTOT orderItemDTOT : orderItemDTOList) {
-            totalPrice += orderItemDTOT.getPrice();
+        if (orderItemDTOList != null) {
+            for (OrderItemDTOT orderItemDTOT : orderItemDTOList) {
+                totalPrice += orderItemDTOT.getPrice();
+            }
         }
         request.setAttribute("orderItemDTOList", orderItemDTOList);
         request.setAttribute("totalPrice", totalPrice);

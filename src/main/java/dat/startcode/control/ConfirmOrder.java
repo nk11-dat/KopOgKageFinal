@@ -107,8 +107,7 @@ public class ConfirmOrder extends HttpServlet
         request.setAttribute("orderItemDTOList", orderItemDTOList);
         request.getRequestDispatcher("WEB-INF/thanks.jsp").forward(request, response);
 
-        // TODO: På bestillings siden quantity må ikke være = 0!
-        //TODO: Efter ordrebekræftelse kurv skal tømmes
+        session.removeAttribute("OrderItemList");
     }
 }
 
