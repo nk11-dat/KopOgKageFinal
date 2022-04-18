@@ -1,22 +1,31 @@
 package dat.startcode.model.entities;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Order
 {
     private int orderId;
     private int userId;
-    private int status;
+    private boolean status;
     private int totalSum;
     private Date date;
 
-    public Order(int orderId, int userId, int status, int totalSum, Date date)
+    public Order(int orderId, int userId, boolean status, int totalSum, Date date)
     {
         this.orderId = orderId;
         this.userId = userId;
         this.status = status;
         this.totalSum = totalSum;
         this.date = date;
+    }
+
+    public Order(int orderId, int userId, boolean status, int totalSum)
+    {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.status = status;
+        this.totalSum = totalSum;
     }
 
     public int getOrderId()
@@ -39,12 +48,12 @@ public class Order
         this.userId = userId;
     }
 
-    public int getStatus()
+    public boolean getStatus()
     {
         return status;
     }
 
-    public void setStatus(int status)
+    public void setStatus(boolean status)
     {
         this.status = status;
     }
