@@ -15,19 +15,18 @@ th, td {
     width: 50%;
 }
 
-
 .table-danger{
     --bs-table-bg: lightpink!important;
 }
 
-.table-order{
+.order{
     --bs-table-bg: #ffdbe4!important;
     /*--bs-table-bg: #ffedf1!important;*/
 }
 
-.table-cheesecake{
-    --bs-table-bg: #ffdbe4!important;
-    /*--bs-table-bg: #ffedf1!important;*/
+#myTable{
+    min-width: 865px;
+    table-layout: fixed;
 }
 
 .center-Text{

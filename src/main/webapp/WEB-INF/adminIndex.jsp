@@ -20,114 +20,87 @@
 
         <div style="padding:0px 0px 5px 5px">
             <label for="myInput">Søg: </label>
-            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Søg efter kundenavn...">
+            <input type="text" id="myInput" onkeyup="searchByUsername()" placeholder="Søg efter kundenavn...">
         </div>
         <form method="post">
-            <table class="table" id="myTable">
-                <c:forEach var="userOrdersDTO" items="${requestScope.userOrdersDTOs}">
-                    <tbody>
-                    <tr class="Customer table-danger"> <%-- Loop over kunder --%>
-                        <th scope="col">${userOrdersDTO.user.userId}</th>
-                        <th scope="col">${userOrdersDTO.user.username}</th>
-                        <th scope="col">Email: ${userOrdersDTO.user.email}</th>
-                        <th scope="col">Saldo: ${userOrdersDTO.user.balance} kr</th>
-                        <th scope="col"></th>
-                        <th scope="col">
-                            <button type="button" class="btn"> Show Orders
-                                <%--Pak ind i if sættninger til forskelige pile--%>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
-                                </svg>
-                            </button>
-                        </th>
-                    </tr>
-                    <c:forEach var="orderDTO" items="${userOrdersDTO.orderOverviewHeaderAdminDTO}">
-                        <tr class="table-order table-cheesecake">
-                            <th></th>
-                            <th scope="col">Order Id: ${orderDTO.orderId}</th>
-                            <th scope="col">${orderDTO.totalsum} kr</th>
-                            <th scope="col">${orderDTO.date}</th>
+            <div class="table-responsive-xl">
+                <table class="table-responsive-sm table" id="myTable">
+                    <c:forEach var="userOrdersDTO" items="${requestScope.userOrdersDTOs}">
+                        <tbody class="customer customer${userOrdersDTO.user.userId}"
+                               id="user${userOrdersDTO.user.userId}">
+                        <tr class="table-danger"> <%-- Loop over kunder --%>
+                            <th scope="col" style="width: 44px">${userOrdersDTO.user.userId}</th>
+                            <th scope="col">${userOrdersDTO.user.username}</th>
+                            <th scope="col">Email: ${userOrdersDTO.user.email}</th>
+                            <th scope="col">Saldo: ${userOrdersDTO.user.balance} kr</th>
+                            <th scope="col"></th>
                             <th scope="col">
-                                <c:if test="${orderDTO.status == true}">Betalt</c:if>
-                                <c:if test="${orderDTO.status == false}">Afventer betaling</c:if>
-                            </th>
-                            <th scope="col">
-                                <button
-                                        <c:if test="${orderDTO.status == true}">disabled</c:if>
-                                        <c:if test="${orderDTO.status == false}">formaction="OrderOverviewAdmin"
-                                        name="orderid"
-                                        value="${orderDTO.orderId}"</c:if>
-                                        class="btn btn-secondary">
-                                    Godkend
-                                </button>
-                                <button formaction="OrderOverviewAdmin2" formmethod="get" name="orderid"
-                                        value="${orderDTO.orderId}" class="btn btn-secondary">
-                                    Slet
+                                <button type="button" class="btn" id="btnuserOrders${userOrdersDTO.user.userId}"
+                                        onclick="showHideUserOrders('userOrders'+${userOrdersDTO.user.userId})">Show orders
+                                        <%--Pak ind i if sættninger til forskelige pile--%>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                         class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                              d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
+                                    </svg>
                                 </button>
                             </th>
                         </tr>
-                        <c:forEach var="orderItemDTO" items="${orderDTO.orderItem}">
-                            <tr>
-                                <td></td>
-                                <td>${orderItemDTO.flavor}</td>
-                                <td>${orderItemDTO.quantity} stk</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </c:forEach>
-                    </c:forEach>
                         </tbody>
-                </c:forEach>
-            </table>
-                <%--<table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">#orderID</th>
-                        <th scope="col">Brugernavn</th>
-                        <th scope="col">Cupcaketype</th>
-                        <th scope="col">Antal</th>
-                        <th scope="col">Total pris</th>
-                        <th scope="col">Bestillings Dato</th>
-                        <th scope="col">Status</th>
-                        <th scope="col"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="orderDTO" items="${requestScope.orderDTOList}">
-                        <tr>
-                            <td>${orderDTO.orderId}</td>
-                            <td>${orderDTO.costumerUsername}</td>
-                            <td>${orderDTO.flavor}</td>
-                            <td>${orderDTO.quantity}</td>
-                            <td>${orderDTO.totalsum}</td>
-                            <td>${orderDTO.date}</td>
-                            <td>${orderDTO.status}</td>
-                            <td>
-                                <c:if test="${orderDTO.status == true}">
-                                    <button disabled class="btn btn-secondary">Godkendt</button>
-                                </c:if>
-                                <c:if test="${orderDTO.status == false}">
-                                    <button formaction="OrderOverview" name="orderid" value="${orderDTO.orderId}" class="btn btn-secondary">Afventer</button>
-                                </c:if>
-                            </td>
-                        </tr>
+                        <tbody class="orders customer${userOrdersDTO.user.userId} userOrders${userOrdersDTO.user.userId}"
+                               style="display: none">
+                        <c:forEach var="orderDTO" items="${userOrdersDTO.orderOverviewHeaderAdminDTO}">
+                            <tr class="order"><%--style="display: none"--%>
+                                <th></th>
+                                <th scope="col">Order Id: ${orderDTO.orderId}</th>
+                                <th scope="col">${orderDTO.totalsum} kr</th>
+                                <th scope="col">${orderDTO.date}</th>
+                                <th scope="col">
+                                    <c:if test="${orderDTO.status == true}">Betalt</c:if>
+                                    <c:if test="${orderDTO.status == false}">Afventer betaling</c:if>
+                                </th>
+                                <th scope="col">
+                                    <button
+                                            <c:if test="${orderDTO.status == true}">disabled</c:if>
+                                            <c:if test="${orderDTO.status == false}">formaction="OrderOverviewAdmin"
+                                            name="orderid"
+                                            value="${orderDTO.orderId}"</c:if>
+                                            class="btn btn-secondary">
+                                        Godkend
+                                    </button>
+                                    <button formaction="OrderOverviewAdmin2" formmethod="get" name="orderid"
+                                            value="${orderDTO.orderId}" class="btn btn-secondary">
+                                        Slet
+                                    </button>
+                                </th>
+                            </tr>
+                            <c:forEach var="orderItemDTO" items="${orderDTO.orderItem}">
+                                <tr class="orderItems"><%--style="display: none"--%>
+                                    <td></td>
+                                    <td>${orderItemDTO.flavor}</td>
+                                    <td>${orderItemDTO.quantity} stk</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </c:forEach>
+                        </c:forEach>
+                        </tbody>
                     </c:forEach>
-                    </tbody>
-                </table>--%>
+                </table>
+            </div>
         </form>
 
         <%--Javascript til search funktion--%>
         <script>
-            function myFunction() {
-                var input, filter, table, tr, td, th, i, txtValue, tbody;
+            function searchByUsername() {
+                var input, filter, table, tr, td, th, i, txtValue, tbody, currentClassId;
                 input = document.getElementById("myInput"); //Få fat i input elementet
                 filter = input.value.toUpperCase(); //hent det som blev skrevet i input elementet
                 table = document.getElementById("myTable");
                 tbody = table.getElementsByTagName("tbody");
+                // tbodyHeader = tbody.getElementsByClassName("customer");
+
 
                 for (i = 0; i < tbody.length; i++) { //Loop igennem <tbody>'s (kunder)
                     tr = tbody[i].getElementsByTagName("tr");
@@ -136,10 +109,40 @@
                         if (th) {
                             txtValue = th.textContent || th.innerText; //fyld teksen fra <th> i txtValue
                             if (txtValue.toUpperCase().indexOf(filter) > -1) { //sammenlign textValue med fliter
-                                tr[r].style.display = ""; //gør intet hvis det matcher med søgning
-                            } else {
-                                tr[r].style.display = "none"; //ellers skjul rækken
+                                currentClassId = tbody[i].classList[1]; //gem ClassId hvis det matcher med søgning
                             }
+                        }
+                        if (tbody[i].classList.contains(currentClassId)) {
+                            tr[r].style.display = ""; //vis <tr> hvis ClassId det matcher med søgning
+                        } else {
+                            tr[r].style.display = "none"; //ellers skjul <tr>
+                        }
+                    }
+                }
+            }
+
+            function showHideUserOrders(identifier) {
+                var table, btn, i, tbody;
+                table = document.getElementById("myTable");
+                tbody = table.getElementsByTagName("tbody");
+
+
+                for (i = 0; i < tbody.length; i++) { //Loop igennem <tbody>'s (kunder)
+                    if (tbody[i].classList.contains(identifier)) {
+                        btn = document.getElementById("btn"+identifier);
+                        if (tbody[i].style.display == "none"){
+                            tbody[i].style.display = ""; //vis <tbody> hvis identifier eller det en customer<tbody>
+                            btn.innerHTML = "Hide orders ";
+                        //(Scary looking) Viser pil ned
+                            btn.innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/></svg>';
+                        }
+                        else
+                        {
+                            tbody[i].style.display = "none";
+                            btn.innerHTML = "Show orders";
+                            btn.innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path></svg>';
+                            //(Scary looking) Viser pil up
+
                         }
                     }
                 }
