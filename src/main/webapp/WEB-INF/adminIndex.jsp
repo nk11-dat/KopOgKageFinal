@@ -24,41 +24,63 @@
         </div>
         <form method="post">
             <table class="table" id="myTable">
-                <c:forEach var="orderDTO" items="${requestScope.orderDTOList}">
+                <c:forEach var="userOrdersDTO" items="${requestScope.userOrdersDTOs}">
                     <tbody>
-                    <tr class="table-danger">
-                        <th scope="col">${orderDTO.orderId}</th>
-                        <th scope="col" class="customerName">${orderDTO.costumerUsername}</th>
-                        <th scope="col">${orderDTO.totalsum} kr</th>
-                        <th scope="col">${orderDTO.date}</th>
+                    <tr class="Customer table-danger"> <%-- Loop over kunder --%>
+                        <th scope="col">${userOrdersDTO.user.userId}</th>
+                        <th scope="col">${userOrdersDTO.user.username}</th>
+                        <th scope="col">Email: ${userOrdersDTO.user.email}</th>
+                        <th scope="col">Saldo: ${userOrdersDTO.user.balance} kr</th>
+                        <th scope="col"></th>
                         <th scope="col">
-                            <c:if test="${orderDTO.status == true}">Betalt</c:if>
-                            <c:if test="${orderDTO.status == false}">Afventer betaling</c:if>
-                        </th>
-                        <th scope="col">
-                            <button
-                                    <c:if test="${orderDTO.status == true}">disabled</c:if>
-                                    <c:if test="${orderDTO.status == false}">formaction="OrderOverviewAdmin" name="orderid"
-                                    value="${orderDTO.orderId}"</c:if>
-                                    class="btn btn-secondary">
-                                Godkend
-                            </button>
-                            <button formaction="OrderOverviewAdmin2" formmethod="get" name="orderid" value="${orderDTO.orderId}" class="btn btn-secondary">
-                                Slet
+                            <button type="button" class="btn"> Show Orders
+                                <%--Pak ind i if sættninger til forskelige pile--%>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                                </svg>
                             </button>
                         </th>
                     </tr>
-                    <c:forEach var="orderItemDTO" items="${orderDTO.orderItem}">
-                        <tr>
-                            <td></td>
-                            <td>${orderItemDTO.flavor}</td>
-                            <td>${orderItemDTO.quantity} stk</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                    <c:forEach var="orderDTO" items="${userOrdersDTO.orderOverviewHeaderAdminDTO}">
+                        <tr class="table-order table-cheesecake">
+                            <th></th>
+                            <th scope="col">Order Id: ${orderDTO.orderId}</th>
+                            <th scope="col">${orderDTO.totalsum} kr</th>
+                            <th scope="col">${orderDTO.date}</th>
+                            <th scope="col">
+                                <c:if test="${orderDTO.status == true}">Betalt</c:if>
+                                <c:if test="${orderDTO.status == false}">Afventer betaling</c:if>
+                            </th>
+                            <th scope="col">
+                                <button
+                                        <c:if test="${orderDTO.status == true}">disabled</c:if>
+                                        <c:if test="${orderDTO.status == false}">formaction="OrderOverviewAdmin"
+                                        name="orderid"
+                                        value="${orderDTO.orderId}"</c:if>
+                                        class="btn btn-secondary">
+                                    Godkend
+                                </button>
+                                <button formaction="OrderOverviewAdmin2" formmethod="get" name="orderid"
+                                        value="${orderDTO.orderId}" class="btn btn-secondary">
+                                    Slet
+                                </button>
+                            </th>
                         </tr>
+                        <c:forEach var="orderItemDTO" items="${orderDTO.orderItem}">
+                            <tr>
+                                <td></td>
+                                <td>${orderItemDTO.flavor}</td>
+                                <td>${orderItemDTO.quantity} stk</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </c:forEach>
                     </c:forEach>
-                    </tbody>
+                        </tbody>
                 </c:forEach>
             </table>
                 <%--<table class="table table-striped">
@@ -107,9 +129,9 @@
                 table = document.getElementById("myTable");
                 tbody = table.getElementsByTagName("tbody");
 
-                for (i = 0; i < tbody.length; i++) { //Loop igennem <tbody>'s (ordere)
+                for (i = 0; i < tbody.length; i++) { //Loop igennem <tbody>'s (kunder)
                     tr = tbody[i].getElementsByTagName("tr");
-                    for (r = 0; r < tr.length; r++) { //Loop igennem hver <tr> i <tbody>en
+                    for (r = 0; r < tr.length; r++) { //Loop igennem hver <tr> i <tbody>'en
                         th = tr[0].getElementsByTagName("th")[1];
                         if (th) {
                             txtValue = th.textContent || th.innerText; //fyld teksen fra <th> i txtValue

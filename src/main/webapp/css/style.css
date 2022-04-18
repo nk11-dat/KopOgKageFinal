@@ -20,6 +20,16 @@ th, td {
     --bs-table-bg: lightpink!important;
 }
 
+.table-order{
+    --bs-table-bg: #ffdbe4!important;
+    /*--bs-table-bg: #ffedf1!important;*/
+}
+
+.table-cheesecake{
+    --bs-table-bg: #ffdbe4!important;
+    /*--bs-table-bg: #ffedf1!important;*/
+}
+
 .center-Text{
     text-align: center!important;
 }
