@@ -70,7 +70,7 @@
                                 </div>
 
                                 <!-- Submit button -->
-                                <button type="submit" class="btn btn-primary btn-block mb-4">
+                                <button type="submit" style="background-color: lightpink" class="btn btn-danger text-dark btn-block mb-4">
                                     Opret
                                 </button>
 

@@ -31,7 +31,7 @@
 
 
             <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-block mb-4">Log ind</button>
+            <button type="submit" style="background-color: lightpink" class="btn btn-danger text-dark btn-block mb-4">Log ind</button>
 
             <!-- Register buttons -->
             <div class="text-center">

@@ -53,7 +53,7 @@
                         </div>
                         <div class="col-sm">
                             <br>
-                            <button type="submit" class="btn btn-primary" value="submit" formaction="CupcakeOrder" formmethod="post" >Læg i kurv</button>
+                            <button type="submit" style="background-color: lightpink" class="btn btn-danger text-dark" value="submit" formaction="CupcakeOrder" formmethod="post" >Læg i kurv</button>
                         </div>
                     </div>
                 </div>

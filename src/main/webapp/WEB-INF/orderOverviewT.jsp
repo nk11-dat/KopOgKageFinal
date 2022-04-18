@@ -47,7 +47,7 @@
         </table>
             <h4>Total pris: ${requestScope.totalPrice}</h4>
 
-            <button type="submit" class="btn btn-primary">
+            <button type="submit"  style="background-color: lightpink" class=" btn btn-danger text-dark">
                 Bekræft ordre
             </button>
 
