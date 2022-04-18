@@ -14,10 +14,10 @@
     </jsp:attribute>
 
     <jsp:body>
-        <h2>Du har lagt følgende varer i kurv: </h2>
+        <h4>Du har lagt følgende varer i kurv: </h4>
 
         <form action="ConfirmOrder" method="post">
-        <table class="table" style="width: 80%">
+        <table class="table" style="width: 70%">
             <thead class="table-danger">
             <tr>
                 <th scope="col"></th>
@@ -45,7 +45,7 @@
 
             </tbody>
         </table>
-            <h2>Total pris: ${requestScope.totalPrice}</h2>
+            <h4>Total pris: ${requestScope.totalPrice}</h4>
 
             <button type="submit" class="btn btn-primary">
                 Bekræft ordre

@@ -162,8 +162,43 @@ public class OrderItemMapper
         return toppingId;
     }
 
+    public List<OrderItemDTOT> showOrderedItemsByOrderId(int orderId) throws DatabaseException
+    {
+        Logger.getLogger("web").log(Level.INFO, "");
 
+        OrderItemDTOT orderItemDTOT = null;
+        List<OrderItemDTOT> orderItemDTOTList = null;
 
+        String sql = "topping.flavor as topfalvor, bottom.flavor as botflavor, quantity, quantity*(topping.price + bottom.price) as pris " +
+                "FROM orderitem " +
+                "inner join bottom " +
+                "using (bottom_id) " +
+                "inner join topping " +
+                "using (topping_id) " +
+                "where order_id = ? " +
+                "group by order_id;";
 
+        try (Connection connection = connectionPool.getConnection())
+        {
+            try (PreparedStatement ps = connection.prepareStatement(sql))
+            {
+                ps.setInt(1, orderId);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next())
+                {
+                    String toppingFlavor = rs.getString("topflavor");
+                    String bottomFlavor = rs.getString("botflavor");
+                    int quantity = rs.getInt("quantity");
+                    int price = rs.getInt("pris");
+                    orderItemDTOT = new OrderItemDTOT(toppingFlavor, bottomFlavor, quantity, price);
+                    orderItemDTOTList.add(orderItemDTOT);
+                }
+            }
+        } catch (SQLException ex)
+        {
+            throw new DatabaseException(ex, "Fejl under indlæsning af 'orderItems' fra databasen");
+        }
+        return orderItemDTOTList;
+    }
 
 }
