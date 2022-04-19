@@ -17,6 +17,7 @@
     <jsp:body>
 
         <br>
+        <h2 class="center-Text">${requestScope.missingFlavor}</h2>
         <form action="/CupcakeOrder" method="post">
 
                 <div class="container">
