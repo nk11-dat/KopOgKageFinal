@@ -27,7 +27,7 @@ public class OrderMapper implements IOrderMapper {
 
         List<OrderItemOverviewAdminDTO> orderItemsList = new ArrayList<>();
 
-        String sql = "SELECT cupcake.order.order_id, CONCAT(topping.flavor,' ', bottom.flavor) as cupcake, cupcake.orderitem.quantity " +
+        String sql = "SELECT cupcake.order.order_id, CONCAT(bottom.flavor, ' ', topping.flavor) as cupcake, cupcake.orderitem.quantity " +
                 "FROM cupcake.order " +
                 "INNER JOIN orderitem " +
                 "USING(order_id) " +

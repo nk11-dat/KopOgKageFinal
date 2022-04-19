@@ -47,17 +47,11 @@ public class CupcakeOrder extends HttpServlet
         try
         {
             cupcakeToppingList = cupcakeMapper.getToppings();
+            cupcakeBottomList = cupcakeMapper.getBottoms();
         } catch (DatabaseException e)
         {
             e.printStackTrace();
         } catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        try
-        {
-            cupcakeBottomList = cupcakeMapper.getBottoms();
-        } catch (DatabaseException e)
         {
             e.printStackTrace();
         }

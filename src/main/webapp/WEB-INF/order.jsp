@@ -7,7 +7,7 @@
 <t:pagetemplate>
 
     <jsp:attribute name="header">
-        Bestilling
+        Bestilling til ${sessionScope.user.username}
     </jsp:attribute>
 
     <jsp:attribute name="footer">
@@ -16,52 +16,48 @@
 
     <jsp:body>
 
-
+        <br>
         <form action="/CupcakeOrder" method="post">
 
-
-            <table class="table">
-                <div class="dropdown">
-                    Topping
-                    <select name="topping" class="form-select " aria-label="Default select example">
-                        <option selected>Her vælger du din topping</option>
-                        <c:forEach var="cupcakeDTO" items="${applicationScope.cupcakeToppingList}">
-
-                            <option value="${cupcakeDTO.toppingId}">${cupcakeDTO.flavor} (${cupcakeDTO.price} kr.)</option>
-
-                        </c:forEach>
-                    </select>
-
-                </div>
-
-                <table class="table">
-                    <div class="dropdown">
-                        Bund
-                        <select name="bottom" class="form-select" aria-label="Default select example">
-                            <option selected>Her vælger du din bund</option>
-                            <c:forEach var="cupcakeDTO" items="${applicationScope.cupcakeBottomList}">
-
-                                <option value="${cupcakeDTO.bottomId}">${cupcakeDTO.flavor} (${cupcakeDTO.price} kr.)</option>
-
-                            </c:forEach>
-                        </select>
-
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="dropdown">
+                                Bund
+                                <select name="bottom" class="form-select" aria-label="Default select example">
+                                    <option selected>Her vælger du din bund</option>
+                                    <c:forEach var="cupcakeDTO" items="${applicationScope.cupcakeBottomList}">
+                                        <option value="${cupcakeDTO.bottomId}">${cupcakeDTO.flavor} (${cupcakeDTO.price} kr.)</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="dropdown">
+                                Topping
+                                <select name="topping" class="form-select " aria-label="Default select example">
+                                    <option selected>Her vælger du din topping</option>
+                                    <c:forEach var="cupcakeDTO" items="${applicationScope.cupcakeToppingList}">
+                                        <option value="${cupcakeDTO.toppingId}">${cupcakeDTO.flavor} (${cupcakeDTO.price} kr.)</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <br>
+                            <div class="input-group">
+                                <button onclick="numberFunction('-') " style="min-width: 2.5rem" class="btn btn-decrement btn-outline-secondary btn-minus" type="button"><strong>−</strong></button>
+                                <input  name="quantity" id="number" type="number" inputmode="decimal" style="text-align: center" class="form-control " value="1">
+                                <button onclick="numberFunction('+') " style="min-width: 2.5rem" class="btn btn-increment btn-outline-secondary btn-plus" type="button"><strong>+</strong></button>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <br>
+                            <button type="submit" style="background-color: lightpink" class="btn btn-danger text-dark" value="submit" formaction="CupcakeOrder" formmethod="post" >Læg i kurv</button>
+                        </div>
                     </div>
-                </table>
-                <br>
-
-
-                <div class="input-group  ">
-                    <button onclick="numberFunction('-') " style="min-width: 2.5rem" class="btn btn-decrement btn-outline-secondary btn-minus" type="button"><strong>−</strong></button>
-                    <input  name="quantity" id="number" type="number" inputmode="decimal" style="text-align: center" class="form-control " placeholder="0">
-                    <button onclick="numberFunction('+') " style="min-width: 2.5rem" class="btn btn-increment btn-outline-secondary btn-plus" type="button"><strong>+</strong></button>
                 </div>
-                <br><br>
-
-
-
-                <button type="submit" class="btn btn-primary" value="submit" formaction="CupcakeOrder" formmethod="post" >Læg i kurv</button>
-                 </table>
+                <br><br><br>
         </form>
 
         <script>
@@ -72,7 +68,7 @@
                 if (type == '+')
                 {
                     input.value++;
-                }else if (input.value >= 1) {
+                }else if (input.value >= 2) {
                     input.value--;
                 }
             }

@@ -6,7 +6,6 @@
 
 <t:pagetemplate>
     <jsp:attribute name="header">
-         Ordreoversigt
 
     </jsp:attribute>
 
@@ -15,9 +14,10 @@
     </jsp:attribute>
 
     <jsp:body>
+        <h4>Du har lagt følgende varer i kurv: </h4>
 
-        <form action="Thanks" method="get">
-        <table class="table">
+        <form action="ConfirmOrder" method="post">
+        <table class="table" style="width: 70%">
             <thead class="table-danger">
             <tr>
                 <th scope="col"></th>
@@ -47,7 +47,7 @@
         </table>
             <h4>Total pris: ${requestScope.totalPrice}</h4>
 
-            <button type="submit" class="btn btn-danger" style="background-color: lightpink">
+            <button type="submit"  style="background-color: lightpink" class=" btn btn-danger text-dark">
                 Bekræft ordre
             </button>
 

@@ -15,12 +15,11 @@
 
     <jsp:body>
 
-     <h4>Tak for din bestilling hos Olsker Cupcakes.</h4>
+        <h4>Tak for din bestilling hos Olsker Cupcakes.</h4>
         <h5>Dette er en ordrebekræfetelse på din ordre.</h5>
         <br>
-        <br>
 
-        <table class="table table-bordered">
+        <table class="table table-bordered" style="width: 70%">
             <thead>
             <tr>
                 <th colspan="2">Ordreinformation</th>
@@ -30,7 +29,7 @@
             <tr>
                 <td>Navn:</td>
                 <td>
-                    ${requestScope.orderInformationDTO.name}
+                        ${requestScope.orderInformationDTO.name}
                 </td>
             </tr>
             <tr>
@@ -50,7 +49,7 @@
 
         <br>
 
-        <table class="table table-bordered">
+        <table class="table table-bordered" style="width: 70%">
             <thead>
             <tr>
                 <th colspan="3">Bestilte varer</th>
@@ -63,19 +62,20 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <c:forEach var="orderItemDTOT" items="${requestScope.orderItemDTOList}">
-            <tr>
-                <td scope="row">${orderItemDTOT.bottom} - ${orderItemDTOT.topping}</td>
-                <td>${orderItemDTOT.quantity} stk</td>
-                <td>${orderItemDTOT.price} kr</td>
-            </tr>
+            <c:forEach var="orderitemDTOList" items="${requestScope.orderItemDTOList}">
+                <tr>
+                    <td>${orderitemDTOList.bottom} - ${orderitemDTOList.topping}</td>
+                    <td>${orderitemDTOList.quantity} stk</td>
+                    <td>${orderitemDTOList.price} kr</td>
+                </tr>
             </c:forEach>
-            </tr>
-            <tr>
-                <th scope="col">Total pris: ${requestScope.totalPrice}</th>
-            </tr>
             </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="2"></td>
+                <td style="font-weight: bold">Total pris: ${requestScope.totalSum} kr </td>
+            </tr>
+            </tfoot>
         </table>
         <br>
         <br>

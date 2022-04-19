@@ -15,6 +15,10 @@ th, td {
     width: 50%;
 }
 
+button {
+    border-color: transparent!important;
+}
+
 .table-danger{
     --bs-table-bg: lightpink!important;
 }
@@ -31,4 +35,16 @@ th, td {
 
 .center-Text{
     text-align: center!important;
+}
+
+/* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
 }

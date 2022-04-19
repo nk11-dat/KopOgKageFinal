@@ -1,10 +1,16 @@
 package dat.startcode.control;
 
+import dat.startcode.model.DTO.CupcakeDTO;
+import dat.startcode.model.DTO.OrderInformationDTO;
+import dat.startcode.model.DTO.OrderItemDTOT;
 import dat.startcode.model.config.ApplicationStart;
 import dat.startcode.model.entities.Order;
+import dat.startcode.model.entities.Orderitem;
+import dat.startcode.model.entities.Topping;
 import dat.startcode.model.entities.User;
 import dat.startcode.model.exceptions.DatabaseException;
 import dat.startcode.model.persistence.ConnectionPool;
+import dat.startcode.model.persistence.OrderItemMapper;
 import dat.startcode.model.persistence.OrderMapperT;
 import dat.startcode.model.persistence.UserMapper;
 
@@ -13,7 +19,9 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,11 +30,15 @@ import java.util.logging.Logger;
 public class ConfirmOrder extends HttpServlet
 {
     private ConnectionPool connectionPool;
+    private OrderMapperT orderMapperT;
+    private OrderItemMapper orderItemMapper;
 
     @Override
     public void init() throws ServletException
     {
         this.connectionPool = ApplicationStart.getConnectionPool();
+        orderMapperT = new OrderMapperT(connectionPool);
+        orderItemMapper = new OrderItemMapper(connectionPool);
     }
 
     @Override
@@ -39,21 +51,63 @@ public class ConfirmOrder extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         response.setContentType("text/html");
+        List<OrderItemDTOT> orderItemDTOList = null;
+        Order order = null;
+        Orderitem orderitem = null;
+        OrderInformationDTO orderInformationDTO = null;
+        int totalPrice = 0;
+
         HttpSession session = request.getSession();
-        //session.setAttribute("order", null); // adding empty order object to session scope
-        //OrderMapperT orderMapperT = new OrderMapperT(connectionPool);
+        User user = (User) session.getAttribute("user");
+        int userId = user.getUserId();
 
-        int totalSum = Integer.parseInt(request.getParameter("total_sum"));
+        // Insert order into database
+        orderItemDTOList = (List<OrderItemDTOT>) session.getAttribute("OrderItemList");
+        for (OrderItemDTOT orderItemDTOT : orderItemDTOList) {
+            totalPrice += orderItemDTOT.getPrice();
+        }
 
-        //int userId = Integer.parseInt(request.getParameter("user_id"));
-        //int status = Integer.parseInt(request.getParameter("status"));
-        //int totalSum = Integer.parseInt(request.getParameter("total_sum"));
-        //Date date = new Date(request.getParameter("date"));
+        try {
+            order = orderMapperT.confirmOrder(userId, false,totalPrice);
+        } catch (DatabaseException e) {
+            Logger.getLogger("web").log(Level.SEVERE, e.getMessage());
+            request.setAttribute("errormessage", e.getMessage());
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
+        int orderId = order.getOrderId();
+        int totalSum = order.getTotalSum();
 
-        // Order order = orderMapperT.confirmOrder(userId, status,totalSum,date);
-        session.setAttribute("order", totalSum); // adding order object to session scope
+        // Insert orderitem into database
+        orderItemDTOList = (List<OrderItemDTOT>) session.getAttribute("OrderItemList");
+        for (OrderItemDTOT orderItemDTOT : orderItemDTOList) {
+            int bottomId = 0;
+            int toppingId = 0;
+            int quantity = orderItemDTOT.getQuantity();
+
+            try {
+                bottomId = orderItemMapper.getBottomIdByFlavor(orderItemDTOT.getBottom());
+                toppingId = orderItemMapper.getToppingIdByFlavor(orderItemDTOT.getTopping());
+                orderitem = orderMapperT.insertOrderItem(orderId, toppingId, bottomId, quantity);
+            } catch (DatabaseException e) {
+                Logger.getLogger("web").log(Level.SEVERE, e.getMessage());
+                request.setAttribute("errormessage", e.getMessage());
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+            }
+        }
+        try {
+            orderInformationDTO = orderMapperT.showOrderInformation(orderId);
+        } catch (DatabaseException e) {
+            Logger.getLogger("web").log(Level.SEVERE, e.getMessage());
+            request.setAttribute("errormessage", e.getMessage());
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
+
+        request.setAttribute("orderInformationDTO", orderInformationDTO);
+        request.setAttribute("totalSum", totalSum);
+        request.setAttribute("orderItemDTOList", orderItemDTOList);
         request.getRequestDispatcher("WEB-INF/thanks.jsp").forward(request, response);
 
+        session.removeAttribute("OrderItemList");
     }
 }
 
