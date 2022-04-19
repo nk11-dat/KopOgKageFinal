@@ -2,12 +2,12 @@ package dat.startcode.model.DTO;
 
 import java.util.Date;
 
-public class OrderItemOverviewAdminDTO
+public class OrderItemAdminDTO
 {
  private int quantity;
  private String flavor;
 
- public OrderItemOverviewAdminDTO(int quantity, String flavor) {
+ public OrderItemAdminDTO(int quantity, String flavor) {
   this.quantity = quantity;
   this.flavor = flavor;
  }

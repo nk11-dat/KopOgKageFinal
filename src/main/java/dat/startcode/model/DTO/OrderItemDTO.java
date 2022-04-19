@@ -1,13 +1,13 @@
 package dat.startcode.model.DTO;
 
-public class OrderItemDTOT
+public class OrderItemDTO
 {
     private String bottom;
     private String topping;
     private int quantity;
     private int price;
 
-    public OrderItemDTOT(String bottom, String topping, int quantity, int price)
+    public OrderItemDTO(String bottom, String topping, int quantity, int price)
     {
         this.bottom = bottom;
         this.topping = topping;

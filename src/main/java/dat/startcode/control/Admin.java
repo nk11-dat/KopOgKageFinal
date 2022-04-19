@@ -1,7 +1,7 @@
 package dat.startcode.control;
 
-import dat.startcode.model.DTO.OrderOverviewHeaderAdminDTO;
-import dat.startcode.model.DTO.UserIdTotalSumDTO;
+import dat.startcode.model.DTO.OrderHeaderAdminDTO;
+import dat.startcode.model.DTO.UserIdAndTotalSumDTO;
 import dat.startcode.model.DTO.UserOrdersDTO;
 import dat.startcode.model.config.ApplicationStart;
 import dat.startcode.model.entities.User;
@@ -15,7 +15,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,8 +24,8 @@ import java.util.logging.Logger;
 
 import static dat.startcode.model.services.Authentication.isRoleAllowed;
 
-@WebServlet(name = "OrderOverviewAdmin", urlPatterns = "/OrderOverviewAdmin")
-public class OrderOverviewAdmin extends HttpServlet {
+@WebServlet(name = "Admin", urlPatterns = "/Admin")
+public class Admin extends HttpServlet {
     private OrderMapper orderMapper;
     private UserMapper userMapper;
 
@@ -38,10 +37,10 @@ public class OrderOverviewAdmin extends HttpServlet {
         userMapper = new UserMapper(connectionPool);
     }
 
-    @Override //Indlæser OrderOverviewAdmin med data fra mySQL hvis man er logged ind som admin
+    @Override //Indlæser Admin med data fra mySQL hvis man er logged ind som admin
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
-        List<OrderOverviewHeaderAdminDTO> orderDTOList = null;
+        List<OrderHeaderAdminDTO> orderDTOList = null;
         List<UserOrdersDTO> userOrdersDTOs = new ArrayList<>();
         List<User> userList = null;
         try
@@ -51,8 +50,8 @@ public class OrderOverviewAdmin extends HttpServlet {
                 orderDTOList = orderMapper.getAllOrders();
                 userList = userMapper.showAllUsers();
                 for (User user : userList) {
-                    List<OrderOverviewHeaderAdminDTO> tempOrderHeader = new ArrayList<>();
-                    for (OrderOverviewHeaderAdminDTO orderHeader : orderDTOList) {
+                    List<OrderHeaderAdminDTO> tempOrderHeader = new ArrayList<>();
+                    for (OrderHeaderAdminDTO orderHeader : orderDTOList) {
                         if (orderHeader.getCostumerUsername().equalsIgnoreCase(user.getUsername()))
                             tempOrderHeader.add(orderHeader);
                     }
@@ -83,7 +82,7 @@ public class OrderOverviewAdmin extends HttpServlet {
 
         try
         {
-            UserIdTotalSumDTO userIdAndTotalSum = orderMapper.getUserIdAndTotalSumByOrderId(orderId);
+            UserIdAndTotalSumDTO userIdAndTotalSum = orderMapper.getUserIdAndTotalSumByOrderId(orderId);
             int userId = userIdAndTotalSum.getUserId();
             int price = userIdAndTotalSum.getTotalSum();
 

@@ -1,10 +1,10 @@
 package dat.startcode.model.DTO;
 
-public class UserIdTotalSumDTO {
+public class UserIdAndTotalSumDTO {
     private int userId;
     private int totalSum;
 
-    public UserIdTotalSumDTO(int userId, int totalSum) {
+    public UserIdAndTotalSumDTO(int userId, int totalSum) {
         this.userId = userId;
         this.totalSum = totalSum;
     }

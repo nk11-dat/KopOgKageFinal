@@ -3,16 +3,16 @@ package dat.startcode.model.DTO;
 import java.util.Date;
 import java.util.List;
 
-public class OrderOverviewHeaderAdminDTO
+public class OrderHeaderAdminDTO
 {
  private int orderId;
  private String costumerUsername;
  private int totalsum;
  private boolean status;
  private Date date;
- private List<OrderItemOverviewAdminDTO> orderItem;
+ private List<OrderItemAdminDTO> orderItem;
 
- public OrderOverviewHeaderAdminDTO(int orderId, String costumerUsername, int totalsum, boolean status, Date date, List<OrderItemOverviewAdminDTO> orderItem) {
+ public OrderHeaderAdminDTO(int orderId, String costumerUsername, int totalsum, boolean status, Date date, List<OrderItemAdminDTO> orderItem) {
   this.orderId = orderId;
   this.costumerUsername = costumerUsername;
   this.totalsum = totalsum;
@@ -67,17 +67,17 @@ public class OrderOverviewHeaderAdminDTO
   this.orderId = orderId;
  }
 
- public List<OrderItemOverviewAdminDTO> getOrderItem() {
+ public List<OrderItemAdminDTO> getOrderItem() {
   return orderItem;
  }
 
- public void setOrderItem(List<OrderItemOverviewAdminDTO> orderItem) {
+ public void setOrderItem(List<OrderItemAdminDTO> orderItem) {
   this.orderItem = orderItem;
  }
 
  @Override
  public String toString() {
-  return "OrderOverviewHeaderAdminDTO{" +
+  return "OrderHeaderAdminDTO{" +
           "orderId=" + orderId +
           ", costumerUsername='" + costumerUsername + '\'' +
           ", totalsum=" + totalsum +

@@ -1,7 +1,6 @@
 package dat.startcode.control;
 
-import dat.startcode.model.DTO.CupcakeDTO;
-import dat.startcode.model.DTO.OrderItemDTOT;
+import dat.startcode.model.DTO.OrderItemDTO;
 import dat.startcode.model.config.ApplicationStart;
 import dat.startcode.model.entities.Bottom;
 import dat.startcode.model.entities.Topping;
@@ -15,8 +14,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @WebServlet(name = "CupcakeOrder", urlPatterns = "/CupcakeOrder")
 public class CupcakeOrder extends HttpServlet {
@@ -59,7 +56,7 @@ public class CupcakeOrder extends HttpServlet {
         //  request.setAttribute("cupcakeToppingList", cupcakeToppingList);
         // request.setAttribute("cupcakeBottomList", cupcakeBottomList);
 
-        request.getRequestDispatcher("WEB-INF/order.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/cupcakeOrder.jsp").forward(request, response);
 
 
     }
@@ -68,7 +65,7 @@ public class CupcakeOrder extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        List<OrderItemDTOT> OrderItemList = (List<OrderItemDTOT>) session.getAttribute("OrderItemList");
+        List<OrderItemDTO> OrderItemList = (List<OrderItemDTO>) session.getAttribute("OrderItemList");
 
         if (OrderItemList == null) {
             OrderItemList = new ArrayList<>();
@@ -84,7 +81,7 @@ public class CupcakeOrder extends HttpServlet {
             quantityValue = Integer.parseInt(request.getParameter("quantity"));
         } catch (NumberFormatException e) {
             request.setAttribute("missingFlavor", "Du skal vælge både top og bottom flavor!");
-            request.getRequestDispatcher("WEB-INF/order.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/cupcakeOrder.jsp").forward(request, response);
             return;
         }
 
@@ -94,7 +91,7 @@ public class CupcakeOrder extends HttpServlet {
 
             int cupcakePrice = quantityValue * (tempTopping.getPrice() + tempBottom.getPrice());
 
-            OrderItemDTOT temp = new OrderItemDTOT(tempBottom.getFlavor(), tempTopping.getFlavor(), quantityValue, cupcakePrice);
+            OrderItemDTO temp = new OrderItemDTO(tempBottom.getFlavor(), tempTopping.getFlavor(), quantityValue, cupcakePrice);
 
             OrderItemList.add(temp);
         } catch (DatabaseException e) {
@@ -102,6 +99,6 @@ public class CupcakeOrder extends HttpServlet {
         }
 
         session.setAttribute("OrderItemList", OrderItemList);
-        request.getRequestDispatcher("WEB-INF/order.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/cupcakeOrder.jsp").forward(request, response);
     }
 }

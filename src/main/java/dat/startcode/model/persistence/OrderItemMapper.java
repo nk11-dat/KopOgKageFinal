@@ -1,15 +1,11 @@
 package dat.startcode.model.persistence;
 
-import dat.startcode.model.DTO.OrderInformationDTO;
-import dat.startcode.model.DTO.OrderItemDTOT;
-import dat.startcode.model.entities.Order;
+import dat.startcode.model.DTO.OrderItemDTO;
 import dat.startcode.model.entities.Orderitem;
-import dat.startcode.model.entities.User;
 import dat.startcode.model.exceptions.DatabaseException;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,14 +19,14 @@ public class OrderItemMapper
         this.connectionPool = connectionPool;
     }
 
-    public OrderItemDTOT getOrderItemPrice(int toppingId, int bottomId, int quantity) throws DatabaseException
+    public OrderItemDTO getOrderItemPrice(int toppingId, int bottomId, int quantity) throws DatabaseException
     {
 
-        OrderItemDTOT orderItemDTOT = null;
+        OrderItemDTO orderItemDTOT = null;
         int cupcakePrice = -1;
         Logger.getLogger("web").log(Level.INFO, "");
 
-        List<OrderItemDTOT> orderItemDTOList = new ArrayList<>();
+        List<OrderItemDTO> orderItemDTOList = new ArrayList<>();
 
         String sql = "SELECT  (" +
                 "    SELECT price" +
@@ -71,7 +67,7 @@ public class OrderItemMapper
 
 
                     cupcakePrice = (topping + bottom) * quantity;
-                    orderItemDTOT = new OrderItemDTOT(bottomFlavor, toppingFlavor, quantity, cupcakePrice);
+                    orderItemDTOT = new OrderItemDTO(bottomFlavor, toppingFlavor, quantity, cupcakePrice);
                 }
             }
         } catch (SQLException ex)
@@ -162,12 +158,12 @@ public class OrderItemMapper
         return toppingId;
     }
 
-    public List<OrderItemDTOT> showOrderedItemsByOrderId(int orderId) throws DatabaseException
+    public List<OrderItemDTO> showOrderedItemsByOrderId(int orderId) throws DatabaseException
     {
         Logger.getLogger("web").log(Level.INFO, "");
 
-        OrderItemDTOT orderItemDTOT = null;
-        List<OrderItemDTOT> orderItemDTOTList = null;
+        OrderItemDTO orderItemDTOT = null;
+        List<OrderItemDTO> orderItemDTOTList = null;
 
         String sql = "topping.flavor as topfalvor, bottom.flavor as botflavor, quantity, quantity*(topping.price + bottom.price) as pris " +
                 "FROM orderitem " +
@@ -190,7 +186,7 @@ public class OrderItemMapper
                     String bottomFlavor = rs.getString("botflavor");
                     int quantity = rs.getInt("quantity");
                     int price = rs.getInt("pris");
-                    orderItemDTOT = new OrderItemDTOT(toppingFlavor, bottomFlavor, quantity, price);
+                    orderItemDTOT = new OrderItemDTO(toppingFlavor, bottomFlavor, quantity, price);
                     orderItemDTOTList.add(orderItemDTOT);
                 }
             }

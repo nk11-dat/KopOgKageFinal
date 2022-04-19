@@ -62,13 +62,13 @@
                                 <th scope="col">
                                     <button
                                             <c:if test="${orderDTO.status == true}">disabled</c:if>
-                                            <c:if test="${orderDTO.status == false}">formaction="OrderOverviewAdmin"
+                                            <c:if test="${orderDTO.status == false}">formaction="Admin"
                                             name="orderid"
                                             value="${orderDTO.orderId}"</c:if>
                                             class="btn btn-secondary">
                                         Godkend
                                     </button>
-                                    <button formaction="OrderOverviewAdmin2" formmethod="get" name="orderid"
+                                    <button formaction="Admin2" formmethod="get" name="orderid"
                                             value="${orderDTO.orderId}" class="btn btn-secondary">
                                         Slet
                                     </button>
