@@ -32,13 +32,17 @@
             <tbody>
             <tr>
                 <c:forEach var="orderItemDTOT" items="${requestScope.orderItemDTOList}">
-            <tr>
+            <tr class="rowid${requestScope.orderItemDTOList.indexOf(orderItemDTOT)}">
                 <th scope="row"></th>
                 <td>${orderItemDTOT.bottom}</td>
                 <td>${orderItemDTOT.topping}</td>
                 <td>${orderItemDTOT.quantity} stk</td>
                 <td>${orderItemDTOT.price}</td>
-
+                <td>
+                    <button name="rowIndex" type="submit" style="background-color: lightpink" class=" btn btn-danger text-dark" formaction="Cart" formmethod="post" value="${requestScope.orderItemDTOList.indexOf(orderItemDTOT)}">
+                    Fjern
+                    </button>
+                </td>
             </tr>
             </c:forEach>
             </tr>

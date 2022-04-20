@@ -72,7 +72,6 @@ public class ConfirmOrder extends HttpServlet
         int totalSum = order.getTotalSum();
 
         // Insert orderitem into database
-        orderItemDTOList = (List<OrderItemDTO>) session.getAttribute("OrderItemList");
         for (OrderItemDTO orderItemDTOT : orderItemDTOList) {
             int bottomId = 0;
             int toppingId = 0;

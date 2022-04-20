@@ -1,7 +1,11 @@
 package dat.startcode.control;
 
+import dat.startcode.model.DTO.OrderInformationDTO;
 import dat.startcode.model.DTO.OrderItemDTO;
 import dat.startcode.model.config.ApplicationStart;
+import dat.startcode.model.entities.Order;
+import dat.startcode.model.entities.Orderitem;
+import dat.startcode.model.entities.User;
 import dat.startcode.model.persistence.OrderMapper;
 import dat.startcode.model.persistence.ConnectionPool;
 
@@ -45,7 +49,22 @@ public class Cart extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        List<OrderItemDTO> orderItemDTOList = null;
 
+        HttpSession session = request.getSession();
 
+        //Hent listen af orderItems fra sessionScope
+        orderItemDTOList = (List<OrderItemDTO>) session.getAttribute("OrderItemList");
+
+        //Hent indexed for den orderitems der skal fjernes, baseret på dens række i tabellen
+        int rowIndex = Integer.parseInt(request.getParameter("rowIndex"));
+
+        //Fjern genstand fra listen baseret på index og hæng listen op på sessionscope igen
+        orderItemDTOList.remove(rowIndex);
+        session.setAttribute("OrderItemList", orderItemDTOList);
+
+        //Kald doGet igen for at genskabe tabel og udregne totalpris på ny
+        doGet(request, response);
     }
 }
