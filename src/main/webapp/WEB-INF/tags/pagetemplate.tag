@@ -47,7 +47,12 @@
                         <a class="nav-item nav-link" href="${pageContext.request.contextPath}/CupcakeOrder">Bestilling</a>
                         <a class="nav-item nav-link" >Saldo: ${sessionScope.user.balance} </a>
 
-                        <a class="navbar-brand" href="${pageContext.request.contextPath}/Cart" style="margin: 0px 10px 0px 10px;">
+                        <a class="navbar-brand" href="${pageContext.request.contextPath}/Cart" style="margin: 0px 10px 0px <c:if test="${sessionScope.OrderItemList.size() > 0}">-15px</c:if> <c:if test="${sessionScope.OrderItemList.size() <= 0} ">10px</c:if>;">
+                            <c:if test="${sessionScope.OrderItemList.size() > 0}">
+                            <span class="dot">
+                                <p style="margin: 0 auto;width: 50%;font-size: 15px;/* align-items: center; */">${sessionScope.OrderItemList.size()}</p>
+                            </span>
+                            </c:if>
                             <i class="fa" >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-basket" viewBox="0 2 16 16">
                                     <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07
