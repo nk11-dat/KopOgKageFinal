@@ -26,7 +26,7 @@
             <div class="table-responsive-xl">
                 <table class="table-responsive-sm table" id="myTable">
                     <c:forEach var="userOrdersDTO" items="${requestScope.userOrdersDTOs}">
-                        <tbody class="user"
+                        <tbody class="user user${userOrdersDTO.user.userId}"
                                id="user${userOrdersDTO.user.userId}">
                         <tr class="table-danger"> <%-- Loop over kunder --%>
                             <th scope="col" style="width: 44px">${userOrdersDTO.user.userId}</th>
