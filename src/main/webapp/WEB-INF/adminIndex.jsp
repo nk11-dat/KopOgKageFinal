@@ -35,8 +35,8 @@
                             <th scope="col">Saldo: ${userOrdersDTO.user.balance} kr</th>
                             <th scope="col"></th>
                             <th scope="col">
-                                <button type="button" class="btn" id="btnuserOrders${userOrdersDTO.user.userId}"
-                                        onclick="showHideUserOrders('userOrders'+${userOrdersDTO.user.userId})">Show orders
+                                <button type="button" class="btn btnuserOrders" id="btnuserOrders${userOrdersDTO.user.userId}"
+                                        onclick="showHideUserOrders('userOrders'+${userOrdersDTO.user.userId})">Vis ordre
                                         <%--Pak ind i if sættninger til forskelige pile--%>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                          class="bi bi-chevron-down" viewBox="0 0 16 16">
@@ -101,21 +101,31 @@
                 tbody = table.getElementsByTagName("tbody");
                 // tbodyHeader = tbody.getElementsByClassName("customer");
 
+                var displaybtns = table.getElementsByClassName("btnuserOrders");
+                for (var btn of displaybtns) {
+                    btn.innerHTML = "Vis ordre";
+                    //(Scary looking) Viser pil up
+                    btn.innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path></svg>';
+                }
 
-                for (i = 0; i < tbody.length; i++) { //Loop igennem <tbody>'s (kunder)
-                    tr = tbody[i].getElementsByTagName("tr");
-                    for (r = 0; r < tr.length; r++) { //Loop igennem hver <tr> i <tbody>'en
-                        th = tr[0].getElementsByTagName("th")[1];
-                        if (th) {
-                            txtValue = th.textContent || th.innerText; //fyld teksen fra <th> i txtValue
-                            if (txtValue.toUpperCase().indexOf(filter) > -1) { //sammenlign textValue med fliter
-                                currentClassId = tbody[i].classList[1]; //gem ClassId hvis det matcher med søgning
+                for (i = 0; i <= tbody.length; i++) { //Loop igennem <tbody>'s (kunder)
+                    if (tbody[i].getElementsByTagName("tr").length > 0)
+                    {
+                        tr = tbody[i].getElementsByTagName("tr");
+                        for (r = 0; r <= tr.length; r++) { //Loop igennem hver <tr> i <tbody>'en
+                            th = tr[0].getElementsByTagName("th")[1];
+                            if (th) {
+                                txtValue = th.textContent || th.innerText; //fyld teksen fra <th> i txtValue
+                                if (txtValue.toUpperCase().indexOf(filter) > -1) { //sammenlign textValue med fliter
+                                    currentClassId = tbody[i].classList[1]; //gem ClassId hvis det matcher med søgning
+                                }
                             }
-                        }
-                        if (tbody[i].classList.contains(currentClassId)) {
-                            tr[r].style.display = ""; //vis <tr> hvis ClassId det matcher med søgning
-                        } else {
-                            tr[r].style.display = "none"; //ellers skjul <tr>
+                            if (tbody[i].classList.contains(currentClassId)) {
+                                // tr[r].style.display = ""; //vis <tr> hvis ClassId det matcher med søgning
+                                tbody[i].style.display = ""; //vis <tr> hvis ClassId det matcher med søgning
+                            } else {
+                                tbody[i].style.display = "none"; //ellers skjul <tr>
+                            }
                         }
                     }
                 }
@@ -132,16 +142,22 @@
                         btn = document.getElementById("btn"+identifier);
                         if (tbody[i].style.display == "none"){
                             tbody[i].style.display = ""; //vis <tbody> hvis identifier eller det en customer<tbody>
-                            btn.innerHTML = "Hide orders ";
-                        //(Scary looking) Viser pil ned
+                            for (var r = 0; r < tbody[i].rows.length; r++) {
+                                tbody[i].rows[r].style.display = "";
+                            }
+                            btn.innerHTML = "Skjul ordre ";
+                            //(Scary looking) Viser pil ned
                             btn.innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/></svg>';
                         }
                         else
                         {
                             tbody[i].style.display = "none";
-                            btn.innerHTML = "Show orders";
-                            btn.innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path></svg>';
+                            for (var r = 0; r < tbody[i].rows.length; r++) {
+                                tbody[i].rows[r].style.display = "none";
+                            }
+                            btn.innerHTML = "Vis ordre";
                             //(Scary looking) Viser pil up
+                            btn.innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path></svg>';
 
                         }
                     }
